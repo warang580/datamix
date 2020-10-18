@@ -24,18 +24,24 @@ import { set } from "datamix";
 let user = {
   firstname: "John",
   lastname:  "Doe",
-  connections: 12,
+  auth: {
+    login: "jdoe@email.com",
+    connections: 12,
+  }
 };
 
 // Updating without side-effects
-user = set(user, 'email',       'jdoe@email.com');
-user = set(user, 'connections', c => c + 1);
+user = set(user, 'age', 50);
+user = set(user, 'auth.connections', c => c + 1);
 
 user /* => {
-  firstname:   "John",
-  lastname:    "Doe",
-  email:       "jdoe@email.com",
-  connections: 13,
+  firstname: "John",
+  lastname:  "Doe",
+  age:       50,
+  auth: {
+    login: "jdoe@email.com",
+    connections: 13,
+  }
 } */
 ```
 
