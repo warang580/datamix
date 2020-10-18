@@ -6,14 +6,113 @@ Manipulate data of different types with the same consistent API
 
 ## Examples
 
+Note: all functions work exactly the same way on arrays AND objects.
+
+### get
+
 ```js
 import { get } from "datamix";
-
-let contact = { /* ... */ };
-let zipcode = get(contact, 'address.city.zipcode');
+let response = request(/* ... */);
+let userId   = get(response, 'data.user.id'); // => <someId> or `undefined`
 ```
 
-*More examples are coming ...*
+### set
+
+```js
+import { set } from "datamix";
+
+let user = {
+  firstname: "John",
+  lastname:  "Doe",
+  connections: 12,
+};
+
+// Updating without side-effects
+user = set(user, 'email',       'jdoe@email.com');
+user = set(user, 'connections', c => c + 1);
+
+user /* => {
+  firstname:   "John",
+  lastname:    "Doe",
+  email:       "jdoe@email.com",
+  connections: 13,
+} */
+```
+
+### map
+
+```js
+import { map, get } from "datamix";
+
+let users = [/* ... */];
+let names = map(users, user => get(user, 'name', 'unknown'));
+```
+
+### filter
+
+```js
+import { filter, get } from "datamix";
+
+let users  = [/* ... */];
+let admins = filter(users, user => get(user, 'is_admin', false));
+```
+
+
+### reduce
+
+```js
+import { get, reduce } from "datamix";
+
+let shoppingList = {
+  "egg":       {count: 6, unitPrice: 1},
+  "chocolate": {count: 2, unitPrice: 10},
+};
+
+let total = reduce(
+  shoppingList,
+  (total, ingredient) => total + get(ingredient,  'count', 0) * get(ingredient,  'price', 0),
+  0
+); // => 26
+```
+
+### each
+
+```js
+import { each } from "datamix";
+
+let names = {"Jade", "John", "Fred"};
+
+each(names, name => console.log("Hello", name));
+```
+
+### eachSync
+
+```js
+import { eachSync } from "datamix";
+
+let users = [/* ... */];
+
+eachSync(users, async user => {
+  await saveUser(user);
+});
+
+// Everything is done here
+```
+
+### copy
+
+```js
+import { copy } from "datamix";
+
+let numbers  = [1, 2, 3, 4];
+let previous = copy(numbers);
+
+// Editing number with side-effects
+numbers.push(5);
+
+// Previous hasn't changed
+previous // => [1, 2, 3, 4]
+```
 
 ## Installation
 
