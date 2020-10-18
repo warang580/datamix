@@ -1,0 +1,26 @@
+{
+  "name": "datamix",
+  "version": "1.0.0",
+  "description": "Manipulate data of different types with the same consistent API",
+  "repository": "github:warang580/datamix",
+  "homepage": "https://github.com/warang580/datamix",
+  "bugs": "https://github.com/warang580/datamix/issues",
+  "scripts": {
+    "dev": "jest --colors --watch",
+    "test": "jest --colors",
+    "coverage": "jest --colors --coverage"
+  },
+  "keywords": [
+    "array",
+    "object",
+    "manipulating",
+    "data"
+  ],
+  "license": "MIT",
+  "main": "src/datamix.js",
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^26.5.3",
+    "sinon": "^9.2.0"
+  }
+}
