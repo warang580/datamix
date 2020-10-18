@@ -1,5 +1,5 @@
 {
-  "name": "datamix",
+  "name": "@warang580/datamix",
   "version": "1.0.0",
   "description": "Manipulate data of different types with the same consistent API",
   "repository": "github:warang580/datamix",
