@@ -23,6 +23,40 @@ let isNil = function (data) {
 }
 
 /**
+ * Ensures path is an array eg. "hello.world" is transformed into ['hello', 'world]
+ * (not part of public API, just here to avoid duplications)
+ */
+let normalizePath = function (path) {
+  // Empty paths
+  if (isNil(path) || path === "") {
+    return [];
+  }
+
+  // Transform number like 2 into "2" so it can be split
+  if (typeof path === "number") {
+    path = String(path);
+  }
+
+  // Transform path into array if it's not the case already
+  if (typeof path === "string") {
+    path = path.split(".");
+  }
+
+  return path;
+}
+
+/**
+ * Make a functional version of an existing function
+ * (not part of public API, just here to avoid duplications)
+ */
+let makeFunctional = function (fn) {
+  // @TODO: postArgs is not collected, check function arity ? or n second arg ? or boolean for "first"
+  return (...preArgs) => (postArgs) => {
+    return fn(postArgs, ...preArgs);
+  }
+}
+
+/**
  * Copy (~clone) existing data to avoid side-effects
  */
 let copy = function (data) {
@@ -42,10 +76,7 @@ let get = function (data, path, notFoundValue = undefined) {
     return notFoundValue;
   }
 
-  // Transform path into array if it's not the case already
-  if (typeof path === "string") {
-    path = path.split(".");
-  }
+  path = normalizePath(path)
 
   // We're at the end of the path, return the current data
   if (path.length === 0) {
@@ -131,10 +162,7 @@ let set = function (data, path, newValue) {
   // @TODO: use anonymous function to avoid copying too much data by scoping
   data = copy(data);
 
-  // Transform path into array if it's not the case already
-  if (typeof path === "string") {
-    path = path.split(".");
-  }
+  path = normalizePath(path)
 
   // We found the value and return new value instead
   if (path.length === 0) {
@@ -189,8 +217,7 @@ let eachSync = async function (data, callback) {
   if (data instanceof Array) {
     // @NOTE: can't use `each` (or any callback) because of scoping of async/await
     for (let index in data) {
-      // @NOTE: +index = parseNumber(index)
-      await callback(data[index], +index, data);
+      await callback(data[index], parseInt(index), data);
     }
     return;
   }
@@ -202,6 +229,9 @@ let eachSync = async function (data, callback) {
   }
 }
 
+/**
+ * Compute the size of data
+ */
 let size = function (data) {
   if (isNil(data))    return 0;
   if (isArray(data))  return data.length;
@@ -210,4 +240,13 @@ let size = function (data) {
   return undefined;
 }
 
-module.exports = { copy, size, get, set, reduce, map, filter, each, eachSync }
+/**
+ * Function versions of get, set, etc.
+ */
+let fget = makeFunctional(get);
+let fset = makeFunctional(set);
+
+/**
+ * Exporting functions
+ */
+module.exports = { copy, size, get, fget, set, fset, reduce, map, filter, each, eachSync }

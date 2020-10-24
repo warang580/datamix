@@ -2,8 +2,11 @@ const datamix = require("../src/datamix");
 const sinon   = require("sinon");
 
 describe("get", () => {
-  it("returns data as-is if path is empty", function () {
+  it("returns data as-is if path is 'empty'", function () {
     expect(datamix.get({foo: 'bar'}, [])).toStrictEqual({foo: 'bar'});
+    expect(datamix.get({foo: 'bar'}, '')).toStrictEqual({foo: 'bar'});
+    expect(datamix.get({foo: 'bar'}, null)).toStrictEqual({foo: 'bar'});
+    expect(datamix.get({foo: 'bar'}, undefined)).toStrictEqual({foo: 'bar'});
   });
 
   it("uses undefined as a default value", function () {
@@ -19,8 +22,10 @@ describe("get", () => {
   });
 
   it("gets value in indexed array", function () {
-    expect(datamix.get(["a", "b", "c"], ["1"])).toBe("b");
-    expect(datamix.get(["a", "b", "c"], [2]))  .toBe("c");
+    expect(datamix.get(["a", "b", "c", "d"], "0"))  .toBe("a");
+    expect(datamix.get(["a", "b", "c", "d"], ["1"])).toBe("b");
+    expect(datamix.get(["a", "b", "c", "d"], [2]))  .toBe("c");
+    expect(datamix.get(["a", "b", "c", "d"], 3))    .toBe("d");
   });
 
   it("can handle falsy values", function () {
@@ -213,6 +218,12 @@ describe("set", () => {
   it("sets data in an existing array", function () {
     expect(datamix.set(["a", "b", "c", "d"], [2], "x"))
       .toStrictEqual(["a", "b", "x", "d"]);
+
+    expect(datamix.set(["a", "b", "c", "d"], '2', "x"))
+      .toStrictEqual(["a", "b", "x", "d"]);
+
+    expect(datamix.set(["a", "b", "c", "d"], 2, "x"))
+      .toStrictEqual(["a", "b", "x", "d"]);
   });
 
   it("udpates data in an existing object", function () {
@@ -271,5 +282,37 @@ describe("copy", () => {
     values.forEach(value => {
       expect(datamix.copy(value)).toStrictEqual(value);
     });
+  });
+});
+
+describe("fget", () => {
+  it("returns a functional version of get", function () {
+    let users = [{
+      name: "Jane",
+    }, {
+      name: "Fred",
+    }, {
+      // unnamed
+    }];
+
+    expect(datamix.map(users, datamix.fget('name', 'unnamed'))).toStrictEqual(["Jane", "Fred", "unnamed"]);
+  });
+});
+
+describe("fset", () => {
+  it("returns a functional version of set", function () {
+    let users = [{
+      connections: 1,
+    }, {
+      connections: 2,
+    }, {
+      // never connected
+    }];
+
+    expect(
+      datamix
+        .map(users, datamix.fset('connections', c => (c||0) + 1))
+        .map(datamix.fget('connections', 0))
+    ).toStrictEqual([2, 3, 1]);
   });
 });
