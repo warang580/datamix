@@ -249,7 +249,9 @@ let cities = getMany(data, 'users.*.addresses.*.city')
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
-- Breaking: renamed all functional versions with "_" prefix instead of "f" (eg. fmap => _map)
+## [2.0.0](https://github.com/warang580/datamix/compare/1.2.0...2.0.0) (2020-10-24)
+
+- **Breaking**: renamed all functional versions with "_" prefix instead of "f" (eg. fmap => _map)
 - Feature: `getFirst(data, paths, defaultValue = undefined)`
 - Feature: `only(data, paths, withMissing = true)`
 - Feature: `isIterable(data)`
@@ -267,7 +269,7 @@ let cities = getMany(data, 'users.*.addresses.*.city')
 
 ## [1.0.1](https://github.com/warang580/datamix/compare/v1.0.0...1.0.1) (2020-10-24)
 
-- Fixed set(null, ...) error
+- Bugfix: fixed set(null, ...) error
 
 ## 1.0.0 (2020-10-18)
 
