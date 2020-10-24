@@ -120,6 +120,16 @@ numbers.push(5);
 previous // => [1, 2, 3, 4]
 ```
 
+### parseJson
+
+```js
+import { parseJson } from "@warang580/datamix";
+
+let res = '{"foo":"bar"}';
+
+parseJson(res) // => {foo: "bar"}
+```
+
 ### fget
 
 ```js
@@ -169,6 +179,8 @@ let Data = require("@warang580/datamix");
 (NOTE: update package.json > version too)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
+
+- Feature: `parseJson(raw, defaultValue = {})`
 
 ## [1.2.0](https://github.com/warang580/datamix/compare/1.1.0...1.2.0) (2020-10-24)
 

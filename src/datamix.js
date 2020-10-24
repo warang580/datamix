@@ -241,6 +241,17 @@ let size = function (data) {
 }
 
 /**
+ * Parse json, uses defaultValue if parsing fails
+ */
+let parseJson = function (raw, defaultValue = {}) {
+  try {
+    return JSON.parse(raw);
+  } catch (err) {
+    return defaultValue;
+  }
+}
+
+/**
  * Function versions of get, set, etc.
  */
 let fget = makeFunctional(get);
@@ -249,4 +260,4 @@ let fset = makeFunctional(set);
 /**
  * Exporting functions
  */
-module.exports = { copy, size, get, fget, set, fset, reduce, map, filter, each, eachSync }
+module.exports = { copy, size, get, fget, set, fset, reduce, map, filter, each, eachSync, parseJson }
