@@ -8,6 +8,7 @@ Manipulate data of different types with the same consistent API
 ## Installation
 
 NPM  : `npm install @warang580/datamix`
+
 Yarn : `yarn add @warang580/datamix`
 
 ## Usage
@@ -69,6 +70,8 @@ user /* => {
 
 ### `only(data, paths, withMissing = true)`
 
+Paths should be `{oldpath: newpath, ...}`
+
 ```js
 import { only } from "@warang580/datamix";
 
@@ -96,7 +99,7 @@ let user = {
 let number = getFirst(user, ['mobile_phone', 'home_phone', 'work_phone'], "?"); // => "0123"
 ```
 
-### `getFirst(data, path, withPaths = false)`
+### `getAll(data, wildcardPath, withPaths = false)`
 
 ```js
 import { getAll } from "@warang580/datamix";
@@ -109,7 +112,7 @@ let users = [{
   contacts: [{email: "john@mail.com"}, {email: "judy@mail.com"}],
 }];
 
-// Just get values
+// Only get values
 getAll(users, "*.contacts.*.email") // => ["jane@mail.com", "fred@mail.com", "john@mail.com", "judy@mail.com"]
 
 // Get paths and values (can be useful to "set" later)
@@ -128,7 +131,7 @@ getAll({list: [
 
 ### `isIterable(data)`
 
-Tells you if data can be iterated upon (null and undefined are handled as an empty array)
+Tells you if data can be iterated upon (`undefined` and `null` are handled like an empty iterable)
 
 ```js
 import { isIterable } from "@warang580/datamix";
@@ -201,6 +204,8 @@ eachSync(users, async user => {
 ```
 
 ### `copy(data)`
+
+Ensuring that we don't change data by side-effects
 
 ```js
 import { copy } from "@warang580/datamix";
@@ -283,17 +288,17 @@ let roleIds = map(users, user => getAll(user, 'roles.*.id'));
 
 # CHANGELOG
 
-(NOTE: update package.json > version too)
+(NOTE: update package.json version too)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
 ## [2.1.0](https://github.com/warang580/datamix/compare/2.0.0...2.1.0) (2020-10-24)
 
-- Feature: `getAll`
+- Feature: `getAll(data, path)`
 
 ## [2.0.0](https://github.com/warang580/datamix/compare/1.2.0...2.0.0) (2020-10-24)
 
-- **Breaking**: renamed all functional versions with "_" prefix instead of "f" (eg. fmap => _map)
+- **Breaking**: renamed all functional versions with "_" prefix instead of "f" (eg. `fmap` => `_map`)
 - Feature: `getFirst(data, paths, defaultValue = undefined)`
 - Feature: `only(data, paths, withMissing = true)`
 - Feature: `isIterable(data)`
