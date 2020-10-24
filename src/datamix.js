@@ -46,17 +46,6 @@ let normalizePath = function (path) {
 }
 
 /**
- * Make a functional version of an existing function
- * (not part of public API, just here to avoid duplications)
- */
-let makeFunctional = function (fn) {
-  // @TODO: postArgs is not collected, check function arity ? or n second arg ? or boolean for "first"
-  return (...preArgs) => (postArgs) => {
-    return fn(postArgs, ...preArgs);
-  }
-}
-
-/**
  * Copy (~clone) existing data to avoid side-effects
  */
 let copy = function (data) {
@@ -293,12 +282,80 @@ let getFirst = function (data, paths, defaultValue = undefined) {
 };
 
 /**
- * Functional versions
+ * Get all data matching wildcard paths
  */
+let getAll = function (data, path, withPaths = false) {
+  let isWildcard = function (needle) {
+    return needle === "*";
+  }
+
+  let containsWildcard = function (path) {
+    return path.indexOf('*') !== -1;
+  }
+
+  path = normalizePath(path);
+
+  // Make a recursive function to iterate over all branches the path "contains"
+  let getAllRec = function (data, path, currentPath) {
+    // Ignore nil data
+    if (isNil(data)) {
+      return undefined;
+    }
+
+    // We're at the end of one branch of the path, return the current value with its path
+    if (path.length === 0) {
+      return {[currentPath.join('.')]: data};
+    }
+
+    // Recursively fetch data
+    let needle = path[0];
+    let tail   = path.slice(1);
+
+    // If it's a regular path, just get the next value
+    if (! isWildcard(needle)) {
+      return getAllRec(data[needle], tail, currentPath.concat([needle]));
+    }
+
+    // Otherwise, construct {path: value, ...} object for each data
+    return reduce(data, (paths, _, needle) => {
+      // Get current iteration {path: value}
+      let value = getAllRec(data[needle], tail, currentPath.concat([needle]));
+
+      // Merge it into existing object
+      return Object.assign(paths, value);
+    }, {});
+  }
+
+  // Start recursivity with an empty currentPath
+  let values = getAllRec(data, path, []);
+
+  if (withPaths) return values;
+
+  return Object.values(values || {});
+};
+
+/**
+* Make a functional version of an existing function
+* (not part of public API, just here to avoid duplications)
+*/
+let makeFunctional = function (fn) {
+  // eg. makeFunctional(get)('some.path', 'value') will return
+  // a fn that takes data as input and output the result of the full get
+  // which can be used in map, filter and reduce
+  return (...args) => (data) => {
+    return fn(data, ...args);
+  }
+}
+
+/**
+* Functional versions
+*/
+
 let _get      = makeFunctional(get);
 let _set      = makeFunctional(set);
 let _only     = makeFunctional(only);
 let _getFirst = makeFunctional(getFirst);
+let _getAll   = makeFunctional(getAll);
 
 /**
  * Exporting functions
@@ -308,6 +365,7 @@ module.exports = {
   size,
   get, _get,
   getFirst, _getFirst,
+  getAll, _getAll,
   only, _only,
   set, _set,
   isIterable,
