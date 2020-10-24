@@ -202,4 +202,12 @@ let eachSync = async function (data, callback) {
   }
 }
 
-module.exports = { copy, get, set, reduce, map, filter, each, eachSync }
+let size = function (data) {
+  if (isNil(data))    return 0;
+  if (isArray(data))  return data.length;
+  if (isObject(data)) return Object.keys(data).length;
+
+  return undefined;
+}
+
+module.exports = { copy, size, get, set, reduce, map, filter, each, eachSync }
