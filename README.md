@@ -7,14 +7,19 @@ Manipulate data of different types with the same consistent API
 
 ## Examples
 
-Note: all functions work exactly the same way on arrays AND objects.
+Reminder: all functions work on arrays AND objects.
+
+@TODO: show function signature so usage is more clear
 
 ### get
 
 ```js
 import { get } from "@warang580/datamix";
+
 let response = request(/* ... */);
+
 let userId   = get(response, 'data.user.id'); // => <someId> or `undefined`
+let userName = get(response, ['users', user.id, 'name'], "unknown"); // => <name> or "unknown"
 ```
 
 ### set
@@ -73,6 +78,36 @@ let user = {
 };
 
 let number = getFirst(user, ['mobile_phone', 'home_phone', 'work_phone'], "?"); // => "0123"
+```
+
+### getAll
+
+```js
+import { getAll } from "@warang580/datamix";
+
+let users = [{
+  name: "Jane",
+  contacts: [{email: "jane@mail.com"}, {email: "fred@mail.com"}],
+}, {
+  name: "Fred",
+  contacts: [{email: "john@mail.com"}, {email: "judy@mail.com"}],
+}];
+
+// Just get values
+getAll(users, "*.contacts.*.email") // => ["jane@mail.com", "fred@mail.com", "john@mail.com", "judy@mail.com"]
+
+// Get paths and values (can be useful to "set" later)
+getAll({list: [
+  {a: [1, 2]}, {a: [3, 4, 5]}, {z: [6]}, {a: [7, 8]},
+]}, 'list.*.a.*', true) /* => {
+  'list.0.a.0': 1,
+  'list.0.a.1': 2,
+  'list.1.a.0': 3,
+  'list.1.a.1': 4,
+  'list.1.a.2': 5,
+  'list.3.a.0': 7,
+  'list.3.a.1': 8,
+} */
 ```
 
 ### isIterable
@@ -235,12 +270,7 @@ let Data = require("@warang580/datamix");
 
 # ROADMAP
 
-- `getMany` ?
-
-```
-let cities = getMany(data, 'users.*.addresses.*.city')
-```
-
+- mergeWith((v1, v2, k?) => {/* ... */}, ...data)
 - transducers (t => t.map() t.filter() ?) ?
 
 # CHANGELOG
@@ -248,6 +278,8 @@ let cities = getMany(data, 'users.*.addresses.*.city')
 (NOTE: update package.json > version too)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
+
+- Feature: `getAll`
 
 ## [2.0.0](https://github.com/warang580/datamix/compare/1.2.0...2.0.0) (2020-10-24)
 
