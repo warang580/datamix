@@ -206,8 +206,7 @@ let eachSync = async function (data, callback) {
   if (data instanceof Array) {
     // @NOTE: can't use `each` (or any callback) because of scoping of async/await
     for (let index in data) {
-      // @NOTE: +index = parseNumber(index)
-      await callback(data[index], +index, data);
+      await callback(data[index], parseInt(index), data);
     }
     return;
   }
