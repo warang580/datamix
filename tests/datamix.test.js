@@ -34,9 +34,31 @@ describe("get", () => {
     expect(datamix.get({a: {b: {c: "d"}}}, 'a.b.c')).toBe("d");
   });
 
-  it("can handle 'empty' values as base value", function () {
+  it("can handle nil data as base value", function () {
     expect(datamix.get(null,      ['foo'], "bar")).toStrictEqual("bar");
     expect(datamix.get(undefined, ['foo'], "bar")).toStrictEqual("bar");
+  });
+});
+
+describe("size", () => {
+  it("returns array length", function () {
+    expect(datamix.size(['a', 'b'])).toBe(2);
+  });
+
+  it("returns object length", function () {
+    expect(datamix.size({foo: 'bar', baz: 'bee'})).toBe(2);
+  });
+
+  it("returns 0 for empty|nil data", function () {
+    [[], {}, undefined, null].forEach(e => {
+      expect(datamix.size(e)).toStrictEqual(0);
+    })
+  });
+
+  it("returns undefined for simple data", function () {
+    [42, 3.14, "hello"].forEach(e => {
+      expect(datamix.size(e)).toStrictEqual(undefined);
+    })
   });
 });
 
@@ -51,7 +73,7 @@ describe("reduce", () => {
       .toStrictEqual(7);
   });
 
-  it("ignores 'empty' values", function () {
+  it("ignores nil data", function () {
     expect(datamix.reduce(null, (s, v) => s + v, 1)).toStrictEqual(1);
     expect(datamix.reduce(undefined, (s, v) => s + v, 1)).toStrictEqual(1);
   });
@@ -78,7 +100,7 @@ describe("each", () => {
     expect(callback.calledWith(2, "b", object)).toBe(true);
   });
 
-  it("ignores 'empty' values", function () {
+  it("ignores nil data", function () {
     let callback = sinon.fake();
     let object   = {a: 1, b: 2};
 
@@ -126,7 +148,7 @@ describe("eachSync", () => {
     ]);
   });
 
-  it("ignores 'empty' values", async function () {
+  it("ignores nil data", async function () {
     let calls = [];
 
     await datamix.eachSync(undefined, async (v, k, o) => {
@@ -159,7 +181,7 @@ describe("map", () => {
       .toStrictEqual({a:2, b:3, c:4});
   });
 
-  it("ignores 'empty' values", function () {
+  it("ignores nil data", function () {
     expect(datamix.map(null,      v => v + 1)).toStrictEqual(null);
     expect(datamix.map(undefined, v => v + 1)).toStrictEqual(undefined);
   });
@@ -176,7 +198,7 @@ describe("filter", () => {
       .toStrictEqual({b:2, c:3});
   });
 
-  it("ignores 'empty' values", function () {
+  it("ignores nil data", function () {
     expect(datamix.filter(null,      v => v >= 2)).toStrictEqual(null);
     expect(datamix.filter(undefined, v => v >= 2)).toStrictEqual(undefined);
   });
