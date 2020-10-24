@@ -175,42 +175,42 @@ let res = '{"foo":"bar"}';
 parseJson(res) // => {foo: "bar"}
 ```
 
-### fget (functional version of get)
+### _get (functional version of get)
 
 ```js
-import { map, fget, get } from "@warang580/datamix";
+import { map, _get, get } from "@warang580/datamix";
 
-let names = map(users, fget('name', 'unknown'));
+let names = map(users, _get('name', 'unknown'));
 // is equivalent to
 let names = map(users, user => get(user, 'name', 'unknown'));
 ```
 
-### fset (functional version of set)
+### _set (functional version of set)
 
 ```js
-import { set, fset } from "@warang580/datamix";
+import { set, _set } from "@warang580/datamix";
 
-let names = map(users, fset('connections', c => c + 1));
+let names = map(users, _set('connections', c => c + 1));
 // is equivalent to
 let names = map(users, user => set(user, 'connections', c => c + 1));
 ```
 
-### fonly (functional version of only)
+### _only (functional version of only)
 
 ```js
-import { only, fonly } from "@warang580/datamix";
+import { only, _only } from "@warang580/datamix";
 
-let u = map(users, fonly(['name', 'email']));
+let u = map(users, _only(['name', 'email']));
 // is equivalent to
 let u = map(users, user => only(user, ['name', 'email']));
 ```
 
-### fgetFirst (functional version of getFirst)
+### _getFirst (functional version of getFirst)
 
 ```js
-import { getFirst, fgetFirst } from "@warang580/datamix";
+import { getFirst, _getFirst } from "@warang580/datamix";
 
-let email = map(users, fgetFirst(['email', 'login.email', 'contact.email']));
+let email = map(users, _getFirst(['email', 'login.email', 'contact.email']));
 // is equivalent to
 let email = map(users, user => getFirst(user, ['email', 'login.email', 'contact.email']));
 ```
@@ -241,7 +241,6 @@ let Data = require("@warang580/datamix");
 let cities = getMany(data, 'users.*.addresses.*.city')
 ```
 
-- prefix functional versions by "_", not "f" ?
 - transducers (t => t.map() t.filter() ?) ?
 
 # CHANGELOG
@@ -250,6 +249,7 @@ let cities = getMany(data, 'users.*.addresses.*.city')
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+- Breaking: renamed all functional versions with "_" prefix instead of "f" (eg. fmap => _map)
 - Feature: `getFirst(data, paths, defaultValue = undefined)`
 - Feature: `only(data, paths, withMissing = true)`
 - Feature: `isIterable(data)`

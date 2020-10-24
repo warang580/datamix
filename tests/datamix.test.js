@@ -313,7 +313,7 @@ describe("parseJson", () => {
   });
 });
 
-describe("fget", () => {
+describe("_get", () => {
   it("returns a functional version of get", function () {
     let users = [{
       name: "Jane",
@@ -323,11 +323,11 @@ describe("fget", () => {
       // unnamed
     }];
 
-    expect(datamix.map(users, datamix.fget('name', 'unnamed'))).toStrictEqual(["Jane", "Fred", "unnamed"]);
+    expect(datamix.map(users, datamix._get('name', 'unnamed'))).toStrictEqual(["Jane", "Fred", "unnamed"]);
   });
 });
 
-describe("fset", () => {
+describe("_set", () => {
   it("returns a functional version of set", function () {
     let users = [{
       connections: 1,
@@ -339,8 +339,8 @@ describe("fset", () => {
 
     expect(
       datamix
-        .map(users, datamix.fset('connections', c => (c||0) + 1))
-        .map(datamix.fget('connections', 0))
+        .map(users, datamix._set('connections', c => (c||0) + 1))
+        .map(datamix._get('connections', 0))
     ).toStrictEqual([2, 3, 1]);
   });
 });
@@ -370,7 +370,7 @@ describe("only", () => {
   });
 });
 
-describe("fonly", () => {
+describe("_only", () => {
   it("returns a functional version of only", function () {
     let users = [{
       name: "Jane",
@@ -396,7 +396,7 @@ describe("fonly", () => {
       },
     }];
 
-    expect(datamix.map(users, datamix.fonly({
+    expect(datamix.map(users, datamix._only({
       name:  'name',
       email: 'contact.email',
       city:  'address.city.name',
@@ -427,7 +427,7 @@ describe("getFirst", () => {
   });
 });
 
-describe("fgetFirst", () => {
+describe("_getFirst", () => {
   it("returns a functional version of getFirst", function () {
     let data = [
       {a: 1, b: 2},
@@ -436,7 +436,7 @@ describe("fgetFirst", () => {
     ];
 
     expect(
-      datamix.map(data, datamix.fgetFirst(['a', 'b'], 0))
+      datamix.map(data, datamix._getFirst(['a', 'b'], 0))
     ).toStrictEqual([1, 2, 0]);
   });
 });

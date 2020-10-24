@@ -295,10 +295,10 @@ let getFirst = function (data, paths, defaultValue = undefined) {
 /**
  * Functional versions
  */
-let fget  = makeFunctional(get);
-let fset  = makeFunctional(set);
-let fonly = makeFunctional(only);
-let fgetFirst = makeFunctional(getFirst);
+let _get      = makeFunctional(get);
+let _set      = makeFunctional(set);
+let _only     = makeFunctional(only);
+let _getFirst = makeFunctional(getFirst);
 
 /**
  * Exporting functions
@@ -306,14 +306,10 @@ let fgetFirst = makeFunctional(getFirst);
 module.exports = {
   copy,
   size,
-  get,
-  fget,
-  getFirst,
-  fgetFirst,
-  only,
-  fonly,
-  set,
-  fset,
+  get, _get,
+  getFirst, _getFirst,
+  only, _only,
+  set, _set,
   isIterable,
   reduce,
   map,
