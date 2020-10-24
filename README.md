@@ -241,6 +241,7 @@ let Data = require("@warang580/datamix");
 let cities = getMany(data, 'users.*.addresses.*.city')
 ```
 
+- prefix functional versions by "_", not "f" ?
 - transducers (t => t.map() t.filter() ?) ?
 
 # CHANGELOG
