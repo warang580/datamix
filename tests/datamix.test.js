@@ -67,6 +67,20 @@ describe("size", () => {
   });
 });
 
+describe("isIterable", () => {
+  it("returns true for iterable data", function () {
+    [[], {}, undefined, null].forEach(e => {
+      expect(datamix.isIterable(e)).toStrictEqual(true);
+    })
+  });
+
+  it("returns false for non-iterable data", function () {
+    [42, 3.14, "hello"].forEach(e => {
+      expect(datamix.isIterable(e)).toStrictEqual(false);
+    })
+  });
+});
+
 describe("reduce", () => {
   it("behaves like Array.reduce on arrays", function () {
     expect(datamix.reduce([1, 2, 3], (s, v) => s + v, 1))
@@ -285,7 +299,21 @@ describe("copy", () => {
   });
 });
 
-describe("fget", () => {
+describe("parseJson", () => {
+  it("parses a valid json string", function () {
+    expect(datamix.parseJson(JSON.stringify({a: 1, b: 2}))).toStrictEqual({a: 1, b: 2});
+  });
+
+  it("defaults to empty object if json is invalid", function () {
+    expect(datamix.parseJson("{invalid}")).toStrictEqual({});
+  });
+
+  it("uses defaultValue if json is invalid", function () {
+    expect(datamix.parseJson("{invalid}", 42)).toStrictEqual(42);
+  });
+});
+
+describe("_get", () => {
   it("returns a functional version of get", function () {
     let users = [{
       name: "Jane",
@@ -295,11 +323,11 @@ describe("fget", () => {
       // unnamed
     }];
 
-    expect(datamix.map(users, datamix.fget('name', 'unnamed'))).toStrictEqual(["Jane", "Fred", "unnamed"]);
+    expect(datamix.map(users, datamix._get('name', 'unnamed'))).toStrictEqual(["Jane", "Fred", "unnamed"]);
   });
 });
 
-describe("fset", () => {
+describe("_set", () => {
   it("returns a functional version of set", function () {
     let users = [{
       connections: 1,
@@ -311,8 +339,104 @@ describe("fset", () => {
 
     expect(
       datamix
-        .map(users, datamix.fset('connections', c => (c||0) + 1))
-        .map(datamix.fget('connections', 0))
+        .map(users, datamix._set('connections', c => (c||0) + 1))
+        .map(datamix._get('connections', 0))
     ).toStrictEqual([2, 3, 1]);
+  });
+});
+
+describe("only", () => {
+  it("returns a sub-object based on given keys", function () {
+    expect(datamix.only({a: 1, b: 2, c: 3, d: 4}, ['a', 'd'])).toStrictEqual({a: 1, d: 4});
+  });
+
+  it("returns a sub-object based on renamed keys", function () {
+    expect(datamix.only({a: 1, b: 2, c: 3, d: 4}, {x: 'b', y: 'c'})).toStrictEqual({x: 2, y: 3});
+  });
+
+  it('handles complex transformations', function () {
+    expect(datamix.only(
+      {a: {x: 1, y: 2}, b: {z: 3}},
+      {'foo.a': 'a.x', 'foo.b': 'b.z'}
+    )).toStrictEqual({foo: {a: 1, b: 3}});
+  });
+
+  it("set undefined values if nothing is found", function () {
+    expect(datamix.only({a: 1}, ['a', 'b'])).toStrictEqual({a: 1, b: undefined});
+  });
+
+  it("can ignore undefined values", function () {
+    expect(datamix.only({a: 1}, ['a', 'b'], false)).toStrictEqual({a: 1});
+  });
+});
+
+describe("_only", () => {
+  it("returns a functional version of only", function () {
+    let users = [{
+      name: "Jane",
+      contact: {
+        email: "jane@mail.com",
+      },
+      address: {
+        city: {
+          name: "Paris",
+          zipcode: "75000",
+        },
+      },
+    }, {
+      name: "Fred",
+      contact: {
+        email: "fred@mail.com",
+      },
+      address: {
+        city: {
+          name: "Strasbourg",
+          zipcode: "67000",
+        },
+      },
+    }];
+
+    expect(datamix.map(users, datamix._only({
+      name:  'name',
+      email: 'contact.email',
+      city:  'address.city.name',
+    }))).toStrictEqual([
+      {name: "Jane", email: "jane@mail.com", city: "Paris"},
+      {name: "Fred", email: "fred@mail.com", city: "Strasbourg"},
+    ]);
+  });
+});
+
+describe("getFirst", () => {
+  it("gets the first defined value", function () {
+    let user = {
+      name: "Jane",
+      work_phone: "0456",
+      home_phone: "0123",
+    };
+
+    expect(
+      datamix.getFirst(user, ['mobile_phone', 'home_phone', 'work_phone'], '?')
+    ).toStrictEqual("0123");
+  });
+
+  it("defaults to defaultValue if nothing is found", function () {
+    expect(
+      datamix.getFirst({}, ['mobile_phone', 'home_phone', 'work_phone'], '?')
+    ).toStrictEqual("?");
+  });
+});
+
+describe("_getFirst", () => {
+  it("returns a functional version of getFirst", function () {
+    let data = [
+      {a: 1, b: 2},
+      {b: 2},
+      {c: 3},
+    ];
+
+    expect(
+      datamix.map(data, datamix._getFirst(['a', 'b'], 0))
+    ).toStrictEqual([1, 2, 0]);
   });
 });

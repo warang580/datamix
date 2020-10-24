@@ -90,6 +90,10 @@ let get = function (data, path, notFoundValue = undefined) {
   return get(data[needle], tail, notFoundValue);
 }
 
+let isIterable = function (data) {
+  return size(data) !== undefined;
+}
+
 /**
  * Reduce arbitrary data (object key-values / array)
  * Ex: reduce(data, (v, k, o) => v', initialValue)
@@ -241,12 +245,76 @@ let size = function (data) {
 }
 
 /**
- * Function versions of get, set, etc.
+ * Parse json, uses defaultValue if parsing fails
  */
-let fget = makeFunctional(get);
-let fset = makeFunctional(set);
+let parseJson = function (raw, defaultValue = {}) {
+  try {
+    return JSON.parse(raw);
+  } catch (err) {
+    return defaultValue;
+  }
+}
+
+/**
+ * Constructs new data based on actual data and paths
+ */
+let only = function (data, paths, withMissing = true) {
+  // Transform ['a', 'b'] into {a: 'a', b: 'b'}
+  if (isArray(paths)) {
+    paths = reduce(paths, (paths, v, k) => {
+      return set(paths, v, v);
+    }, {});
+  }
+
+  // Construct object based on paths
+  return reduce(paths, (next, path, key) => {
+    let value = get(data, path);
+
+    if (isNil(value) && ! withMissing) {
+      return next;
+    }
+
+    return set(next, key, value);
+  }, {});
+}
+
+/**
+ * Get the first defined values for all paths in data, defaultValue otherwise
+ */
+let getFirst = function (data, paths, defaultValue = undefined) {
+  // Get values at each path
+  let values = map(paths, path => get(data, path));
+
+  // Remove undefined values
+  values = values.filter(v => v !== undefined);
+
+  // Get the first value, defaultValue otherwise
+  return get(values, 0, defaultValue);
+};
+
+/**
+ * Functional versions
+ */
+let _get      = makeFunctional(get);
+let _set      = makeFunctional(set);
+let _only     = makeFunctional(only);
+let _getFirst = makeFunctional(getFirst);
 
 /**
  * Exporting functions
  */
-module.exports = { copy, size, get, fget, set, fset, reduce, map, filter, each, eachSync }
+module.exports = {
+  copy,
+  size,
+  get, _get,
+  getFirst, _getFirst,
+  only, _only,
+  set, _set,
+  isIterable,
+  reduce,
+  map,
+  filter,
+  each,
+  eachSync,
+  parseJson,
+}

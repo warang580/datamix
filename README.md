@@ -1,6 +1,7 @@
 # Datamix
 
 Manipulate data of different types with the same consistent API
+(ie. objects and array are both key-value pairs)
 
 **No dependencies included**
 
@@ -43,6 +44,50 @@ user /* => {
     connections: 13,
   }
 } */
+```
+
+### only
+
+```js
+import { only } from "@warang580/datamix";
+
+only({x:1, y:2}, ['x'])      // =>  {x:1}
+only({a:0}, {foo: 'a'})      // =>  {foo:0}
+only({}, ['a'])              // =>  {a:undefined}
+only({}, ['a'], false)       // =>  {}
+
+only(
+  {a: {x: 1, y: 2}, b: {z: 3}},
+  {'foo.a': 'a.x', 'foo.b': 'b.z'}
+) // => {foo: {a: 1, b: 3}}
+```
+
+### getFirst
+
+```js
+import { getFirst } from "@warang580/datamix";
+
+let user = {
+  work_phone: "0456",
+  home_phone: "0123",
+};
+
+let number = getFirst(user, ['mobile_phone', 'home_phone', 'work_phone'], "?"); // => "0123"
+```
+
+### isIterable
+
+Tells you if the value can be iterated upon (null and undefined are handled as an empty array)
+
+```js
+import { isIterable } from "@warang580/datamix";
+
+isIterable([/* ... */]) // => true
+isIterable({/* ... */}) // => true
+isIterable(undefined)   // => true
+isIterable(null)        // => true
+isIterable("hello")     // => false
+isIterable(42)          // => false
 ```
 
 ### map
@@ -120,32 +165,61 @@ numbers.push(5);
 previous // => [1, 2, 3, 4]
 ```
 
-### fget
+### parseJson
 
 ```js
-import { map, fget, get } from "@warang580/datamix";
+import { parseJson } from "@warang580/datamix";
 
-let names = map(users, fget('name', 'unknown'));
+let res = '{"foo":"bar"}';
+
+parseJson(res) // => {foo: "bar"}
+```
+
+### _get (functional version of get)
+
+```js
+import { map, _get, get } from "@warang580/datamix";
+
+let names = map(users, _get('name', 'unknown'));
 // is equivalent to
 let names = map(users, user => get(user, 'name', 'unknown'));
 ```
 
-### fset
+### _set (functional version of set)
 
 ```js
-import { set, fset } from "@warang580/datamix";
+import { set, _set } from "@warang580/datamix";
 
-// with set
+let names = map(users, _set('connections', c => c + 1));
+// is equivalent to
 let names = map(users, user => set(user, 'connections', c => c + 1));
-// with fset
-let names = map(users, fset('connections', c => c + 1));
+```
+
+### _only (functional version of only)
+
+```js
+import { only, _only } from "@warang580/datamix";
+
+let u = map(users, _only(['name', 'email']));
+// is equivalent to
+let u = map(users, user => only(user, ['name', 'email']));
+```
+
+### _getFirst (functional version of getFirst)
+
+```js
+import { getFirst, _getFirst } from "@warang580/datamix";
+
+let email = map(users, _getFirst(['email', 'login.email', 'contact.email']));
+// is equivalent to
+let email = map(users, user => getFirst(user, ['email', 'login.email', 'contact.email']));
 ```
 
 ## Installation
 
-NPM  : `npm install datamix`
+NPM  : `npm install @warang580/datamix`
 
-Yarn : `yarn add datamix`
+Yarn : `yarn add @warang580/datamix`
 
 ## Usage
 
@@ -161,14 +235,27 @@ let Data = require("@warang580/datamix");
 
 # ROADMAP
 
-- only()
-- transducers (t => t.map() t.filter() ?)
+- `getMany` ?
+
+```
+let cities = getMany(data, 'users.*.addresses.*.city')
+```
+
+- transducers (t => t.map() t.filter() ?) ?
 
 # CHANGELOG
 
 (NOTE: update package.json > version too)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
+
+## [2.0.0](https://github.com/warang580/datamix/compare/1.2.0...2.0.0) (2020-10-24)
+
+- **Breaking**: renamed all functional versions with "_" prefix instead of "f" (eg. fmap => _map)
+- Feature: `getFirst(data, paths, defaultValue = undefined)`
+- Feature: `only(data, paths, withMissing = true)`
+- Feature: `isIterable(data)`
+- Feature: `parseJson(raw, defaultValue = {})`
 
 ## [1.2.0](https://github.com/warang580/datamix/compare/1.1.0...1.2.0) (2020-10-24)
 
@@ -182,7 +269,7 @@ let Data = require("@warang580/datamix");
 
 ## [1.0.1](https://github.com/warang580/datamix/compare/v1.0.0...1.0.1) (2020-10-24)
 
-- Fixed set(null, ...) error
+- Bugfix: fixed set(null, ...) error
 
 ## 1.0.0 (2020-10-18)
 
