@@ -11,7 +11,7 @@ Note: all functions work exactly the same way on arrays AND objects.
 ### get
 
 ```js
-import { get } from "datamix";
+import { get } from "@warang580/datamix";
 let response = request(/* ... */);
 let userId   = get(response, 'data.user.id'); // => <someId> or `undefined`
 ```
@@ -19,7 +19,7 @@ let userId   = get(response, 'data.user.id'); // => <someId> or `undefined`
 ### set
 
 ```js
-import { set } from "datamix";
+import { set } from "@warang580/datamix";
 
 let user = {
   firstname: "John",
@@ -48,7 +48,7 @@ user /* => {
 ### map
 
 ```js
-import { map, get } from "datamix";
+import { map, get } from "@warang580/datamix";
 
 let users = [/* ... */];
 let names = map(users, user => get(user, 'name', 'unknown'));
@@ -57,7 +57,7 @@ let names = map(users, user => get(user, 'name', 'unknown'));
 ### filter
 
 ```js
-import { filter, get } from "datamix";
+import { filter, get } from "@warang580/datamix";
 
 let users  = [/* ... */];
 let admins = filter(users, user => get(user, 'is_admin', false));
@@ -67,7 +67,7 @@ let admins = filter(users, user => get(user, 'is_admin', false));
 ### reduce
 
 ```js
-import { get, reduce } from "datamix";
+import { get, reduce } from "@warang580/datamix";
 
 let shoppingList = {
   "egg":       {count: 6, unitPrice: 1},
@@ -84,7 +84,7 @@ let total = reduce(
 ### each
 
 ```js
-import { each } from "datamix";
+import { each } from "@warang580/datamix";
 
 let names = {"Jade", "John", "Fred"};
 
@@ -94,7 +94,7 @@ each(names, name => console.log("Hello", name));
 ### eachSync
 
 ```js
-import { eachSync } from "datamix";
+import { eachSync } from "@warang580/datamix";
 
 let users = [/* ... */];
 
@@ -108,7 +108,7 @@ eachSync(users, async user => {
 ### copy
 
 ```js
-import { copy } from "datamix";
+import { copy } from "@warang580/datamix";
 
 let numbers  = [1, 2, 3, 4];
 let previous = copy(numbers);
@@ -130,12 +130,12 @@ Yarn : `yarn add datamix`
 
 ```js
 // ES6
-import Data from "datamix";
+import Data from "@warang580/datamix";
 ```
 
 ```js
 // NodeJS
-let Data = require("datamix");
+let Data = require("@warang580/datamix");
 ```
 
 # ROADMAP
