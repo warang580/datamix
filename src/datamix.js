@@ -279,11 +279,26 @@ let only = function (data, paths, withMissing = true) {
 }
 
 /**
+ * Get the first defined values for all paths in data, defaultValue otherwise
+ */
+let getFirst = function (data, paths, defaultValue = undefined) {
+  // Get values at each path
+  let values = map(paths, path => get(data, path));
+
+  // Remove undefined values
+  values = values.filter(v => v !== undefined);
+
+  // Get the first value, defaultValue otherwise
+  return get(values, 0, defaultValue);
+};
+
+/**
  * Functional versions
  */
 let fget  = makeFunctional(get);
 let fset  = makeFunctional(set);
 let fonly = makeFunctional(only);
+let fgetFirst = makeFunctional(getFirst);
 
 /**
  * Exporting functions
@@ -293,6 +308,8 @@ module.exports = {
   size,
   get,
   fget,
+  getFirst,
+  fgetFirst,
   only,
   fonly,
   set,

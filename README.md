@@ -1,6 +1,7 @@
 # Datamix
 
 Manipulate data of different types with the same consistent API
+(ie. objects and array are both key-value pairs)
 
 **No dependencies included**
 
@@ -59,6 +60,19 @@ only(
   {a: {x: 1, y: 2}, b: {z: 3}},
   {'foo.a': 'a.x', 'foo.b': 'b.z'}
 ) // => {foo: {a: 1, b: 3}}
+```
+
+### getFirst
+
+```js
+import { getFirst } from "@warang580/datamix";
+
+let user = {
+  work_phone: "0456",
+  home_phone: "0123",
+};
+
+let number = getFirst(user, ['mobile_phone', 'home_phone', 'work_phone'], "?"); // => "0123"
 ```
 
 ### isIterable
@@ -161,7 +175,7 @@ let res = '{"foo":"bar"}';
 parseJson(res) // => {foo: "bar"}
 ```
 
-### fget (function version of get)
+### fget (functional version of get)
 
 ```js
 import { map, fget, get } from "@warang580/datamix";
@@ -171,7 +185,7 @@ let names = map(users, fget('name', 'unknown'));
 let names = map(users, user => get(user, 'name', 'unknown'));
 ```
 
-### fset (function version of set)
+### fset (functional version of set)
 
 ```js
 import { set, fset } from "@warang580/datamix";
@@ -181,25 +195,24 @@ let names = map(users, fset('connections', c => c + 1));
 let names = map(users, user => set(user, 'connections', c => c + 1));
 ```
 
-### fonly (function version of only)
+### fonly (functional version of only)
 
 ```js
 import { only, fonly } from "@warang580/datamix";
 
-let u = map(users, fonly(['name', 'email'));
+let u = map(users, fonly(['name', 'email']));
 // is equivalent to
 let u = map(users, user => only(user, ['name', 'email']));
 ```
 
-### fset
+### fgetFirst (functional version of getFirst)
 
 ```js
-import { set, fset } from "@warang580/datamix";
+import { getFirst, fgetFirst } from "@warang580/datamix";
 
-// with set
-let names = map(users, user => set(user, 'connections', c => c + 1));
-// with fset
-let names = map(users, fset('connections', c => c + 1));
+let email = map(users, fgetFirst(['email', 'login.email', 'contact.email']));
+// is equivalent to
+let email = map(users, user => getFirst(user, ['email', 'login.email', 'contact.email']));
 ```
 
 ## Installation
@@ -228,11 +241,6 @@ let Data = require("@warang580/datamix");
 let cities = getMany(data, 'users.*.addresses.*.city')
 ```
 
-- `getFirst` ?
-
-```
-let name = getFirst(user, ['surname', 'firstname', 'name'], 'unnamed')
-```
 - transducers (t => t.map() t.filter() ?) ?
 
 # CHANGELOG
@@ -241,6 +249,7 @@ let name = getFirst(user, ['surname', 'firstname', 'name'], 'unnamed')
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+- Feature: `getFirst(data, paths, defaultValue = undefined)`
 - Feature: `only(data, paths, withMissing = true)`
 - Feature: `isIterable(data)`
 - Feature: `parseJson(raw, defaultValue = {})`
