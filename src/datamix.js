@@ -23,6 +23,24 @@ let isNil = function (data) {
 }
 
 /**
+ * Ensures path is an array eg. "hello.world" is transformed into ['hello', 'world]
+ * (not part of public API, just here to avoid duplications)
+ */
+let normalizePath = function (path) {
+  // Transform number like 2 into "2" so it can be split
+  if (typeof path === "number") {
+    path = String(path);
+  }
+
+  // Transform path into array if it's not the case already
+  if (typeof path === "string") {
+    path = path.split(".");
+  }
+
+  return path;
+}
+
+/**
  * Copy (~clone) existing data to avoid side-effects
  */
 let copy = function (data) {
@@ -43,15 +61,7 @@ let get = function (data, path, notFoundValue = undefined) {
   }
 
 
-  // Transform number like 2 into "2" so it can be split
-  if (typeof path === "number") {
-    path = String(path);
-  }
-
-  // Transform path into array if it's not the case already
-  if (typeof path === "string") {
-    path = path.split(".");
-  }
+  path = normalizePath(path)
 
   // We're at the end of the path, return the current data
   if (path.length === 0) {
@@ -137,15 +147,7 @@ let set = function (data, path, newValue) {
   // @TODO: use anonymous function to avoid copying too much data by scoping
   data = copy(data);
 
-  // Transform number like 2 into "2" so it can be split
-  if (typeof path === "number") {
-    path = String(path);
-  }
-
-  // Transform path into array if it's not the case already
-  if (typeof path === "string") {
-    path = path.split(".");
-  }
+  path = normalizePath(path)
 
   // We found the value and return new value instead
   if (path.length === 0) {
