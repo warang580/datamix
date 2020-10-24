@@ -45,6 +45,21 @@ user /* => {
 } */
 ```
 
+### isIterable
+
+Tells you if the value can be iterated upon (null and undefined are handled as an empty array)
+
+```js
+import { isIterable } from "@warang580/datamix";
+
+isIterable([/* ... */]) // => true
+isIterable({/* ... */}) // => true
+isIterable(undefined)   // => true
+isIterable(null)        // => true
+isIterable("hello")     // => false
+isIterable(42)          // => false
+```
+
 ### map
 
 ```js
@@ -180,6 +195,7 @@ let Data = require("@warang580/datamix");
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+- Feature: `isIterable(data)`
 - Feature: `parseJson(raw, defaultValue = {})`
 
 ## [1.2.0](https://github.com/warang580/datamix/compare/1.1.0...1.2.0) (2020-10-24)

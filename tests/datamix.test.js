@@ -67,6 +67,20 @@ describe("size", () => {
   });
 });
 
+describe("isIterable", () => {
+  it("returns true for iterable data", function () {
+    [[], {}, undefined, null].forEach(e => {
+      expect(datamix.isIterable(e)).toStrictEqual(true);
+    })
+  });
+
+  it("returns false for non-iterable data", function () {
+    [42, 3.14, "hello"].forEach(e => {
+      expect(datamix.isIterable(e)).toStrictEqual(false);
+    })
+  });
+});
+
 describe("reduce", () => {
   it("behaves like Array.reduce on arrays", function () {
     expect(datamix.reduce([1, 2, 3], (s, v) => s + v, 1))

@@ -90,6 +90,10 @@ let get = function (data, path, notFoundValue = undefined) {
   return get(data[needle], tail, notFoundValue);
 }
 
+let isIterable = function (data) {
+  return size(data) !== undefined;
+}
+
 /**
  * Reduce arbitrary data (object key-values / array)
  * Ex: reduce(data, (v, k, o) => v', initialValue)
@@ -260,4 +264,4 @@ let fset = makeFunctional(set);
 /**
  * Exporting functions
  */
-module.exports = { copy, size, get, fget, set, fset, reduce, map, filter, each, eachSync, parseJson }
+module.exports = { copy, size, get, fget, set, fset, isIterable, reduce, map, filter, each, eachSync, parseJson }
