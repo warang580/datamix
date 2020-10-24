@@ -27,6 +27,11 @@ let isNil = function (data) {
  * (not part of public API, just here to avoid duplications)
  */
 let normalizePath = function (path) {
+  // Empty paths
+  if (isNil(path) || path === "") {
+    return [];
+  }
+
   // Transform number like 2 into "2" so it can be split
   if (typeof path === "number") {
     path = String(path);
@@ -59,7 +64,6 @@ let get = function (data, path, notFoundValue = undefined) {
   if (isNil(data)) {
     return notFoundValue;
   }
-
 
   path = normalizePath(path)
 

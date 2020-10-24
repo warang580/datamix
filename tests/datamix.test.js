@@ -2,8 +2,11 @@ const datamix = require("../src/datamix");
 const sinon   = require("sinon");
 
 describe("get", () => {
-  it("returns data as-is if path is empty", function () {
+  it("returns data as-is if path is 'empty'", function () {
     expect(datamix.get({foo: 'bar'}, [])).toStrictEqual({foo: 'bar'});
+    expect(datamix.get({foo: 'bar'}, '')).toStrictEqual({foo: 'bar'});
+    expect(datamix.get({foo: 'bar'}, null)).toStrictEqual({foo: 'bar'});
+    expect(datamix.get({foo: 'bar'}, undefined)).toStrictEqual({foo: 'bar'});
   });
 
   it("uses undefined as a default value", function () {
