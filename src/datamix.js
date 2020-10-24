@@ -256,12 +256,52 @@ let parseJson = function (raw, defaultValue = {}) {
 }
 
 /**
- * Function versions of get, set, etc.
+ * Constructs new data based on actual data and paths
  */
-let fget = makeFunctional(get);
-let fset = makeFunctional(set);
+let only = function (data, paths, withMissing = true) {
+  // Transform ['a', 'b'] into {a: 'a', b: 'b'}
+  if (isArray(paths)) {
+    paths = reduce(paths, (paths, v, k) => {
+      return set(paths, v, v);
+    }, {});
+  }
+
+  // Construct object based on paths
+  return reduce(paths, (next, path, key) => {
+    let value = get(data, path);
+
+    if (isNil(value) && ! withMissing) {
+      return next;
+    }
+
+    return set(next, key, value);
+  }, {});
+}
+
+/**
+ * Functional versions
+ */
+let fget  = makeFunctional(get);
+let fset  = makeFunctional(set);
+let fonly = makeFunctional(only);
 
 /**
  * Exporting functions
  */
-module.exports = { copy, size, get, fget, set, fset, isIterable, reduce, map, filter, each, eachSync, parseJson }
+module.exports = {
+  copy,
+  size,
+  get,
+  fget,
+  only,
+  fonly,
+  set,
+  fset,
+  isIterable,
+  reduce,
+  map,
+  filter,
+  each,
+  eachSync,
+  parseJson,
+}

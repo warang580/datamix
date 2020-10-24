@@ -45,6 +45,22 @@ user /* => {
 } */
 ```
 
+### only
+
+```js
+import { only } from "@warang580/datamix";
+
+only({x:1, y:2}, ['x'])      // =>  {x:1}
+only({a:0}, {foo: 'a'})      // =>  {foo:0}
+only({}, ['a'])              // =>  {a:undefined}
+only({}, ['a'], false)       // =>  {}
+
+only(
+  {a: {x: 1, y: 2}, b: {z: 3}},
+  {'foo.a': 'a.x', 'foo.b': 'b.z'}
+) // => {foo: {a: 1, b: 3}}
+```
+
 ### isIterable
 
 Tells you if the value can be iterated upon (null and undefined are handled as an empty array)
@@ -145,7 +161,7 @@ let res = '{"foo":"bar"}';
 parseJson(res) // => {foo: "bar"}
 ```
 
-### fget
+### fget (function version of get)
 
 ```js
 import { map, fget, get } from "@warang580/datamix";
@@ -153,6 +169,26 @@ import { map, fget, get } from "@warang580/datamix";
 let names = map(users, fget('name', 'unknown'));
 // is equivalent to
 let names = map(users, user => get(user, 'name', 'unknown'));
+```
+
+### fset (function version of set)
+
+```js
+import { set, fset } from "@warang580/datamix";
+
+let names = map(users, fset('connections', c => c + 1));
+// is equivalent to
+let names = map(users, user => set(user, 'connections', c => c + 1));
+```
+
+### fonly (function version of only)
+
+```js
+import { only, fonly } from "@warang580/datamix";
+
+let u = map(users, fonly(['name', 'email'));
+// is equivalent to
+let u = map(users, user => only(user, ['name', 'email']));
 ```
 
 ### fset
@@ -186,8 +222,18 @@ let Data = require("@warang580/datamix");
 
 # ROADMAP
 
-- only()
-- transducers (t => t.map() t.filter() ?)
+- `getMany` ?
+
+```
+let cities = getMany(data, 'users.*.addresses.*.city')
+```
+
+- `getFirst` ?
+
+```
+let name = getFirst(user, ['surname', 'firstname', 'name'], 'unnamed')
+```
+- transducers (t => t.map() t.filter() ?) ?
 
 # CHANGELOG
 
@@ -195,6 +241,7 @@ let Data = require("@warang580/datamix");
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+- Feature: `only(data, paths, withMissing = true)`
 - Feature: `isIterable(data)`
 - Feature: `parseJson(raw, defaultValue = {})`
 

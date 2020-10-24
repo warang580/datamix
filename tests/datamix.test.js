@@ -344,3 +344,65 @@ describe("fset", () => {
     ).toStrictEqual([2, 3, 1]);
   });
 });
+
+describe("only", () => {
+  it("returns a sub-object based on given keys", function () {
+    expect(datamix.only({a: 1, b: 2, c: 3, d: 4}, ['a', 'd'])).toStrictEqual({a: 1, d: 4});
+  });
+
+  it("returns a sub-object based on renamed keys", function () {
+    expect(datamix.only({a: 1, b: 2, c: 3, d: 4}, {x: 'b', y: 'c'})).toStrictEqual({x: 2, y: 3});
+  });
+
+  it('handles complex transformations', function () {
+    expect(datamix.only(
+      {a: {x: 1, y: 2}, b: {z: 3}},
+      {'foo.a': 'a.x', 'foo.b': 'b.z'}
+    )).toStrictEqual({foo: {a: 1, b: 3}});
+  });
+
+  it("set undefined values if nothing is found", function () {
+    expect(datamix.only({a: 1}, ['a', 'b'])).toStrictEqual({a: 1, b: undefined});
+  });
+
+  it("can ignore undefined values", function () {
+    expect(datamix.only({a: 1}, ['a', 'b'], false)).toStrictEqual({a: 1});
+  });
+});
+
+describe("fonly", () => {
+  it("returns a functional version of only", function () {
+    let users = [{
+      name: "Jane",
+      contact: {
+        email: "jane@mail.com",
+      },
+      address: {
+        city: {
+          name: "Paris",
+          zipcode: "75000",
+        },
+      },
+    }, {
+      name: "Fred",
+      contact: {
+        email: "fred@mail.com",
+      },
+      address: {
+        city: {
+          name: "Strasbourg",
+          zipcode: "67000",
+        },
+      },
+    }];
+
+    expect(datamix.map(users, datamix.fonly({
+      name:  'name',
+      email: 'contact.email',
+      city:  'address.city.name',
+    }))).toStrictEqual([
+      {name: "Jane", email: "jane@mail.com", city: "Paris"},
+      {name: "Fred", email: "fred@mail.com", city: "Strasbourg"},
+    ]);
+  });
+});
