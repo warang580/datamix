@@ -325,6 +325,8 @@ let Data = require("@warang580/datamix");
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+## [2.1.0](https://github.com/warang580/datamix/compare/2.0.0...2.1.0) (2020-10-24)
+
 - Feature: `getAll`
 
 ## [2.0.0](https://github.com/warang580/datamix/compare/1.2.0...2.0.0) (2020-10-24)
