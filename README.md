@@ -153,9 +153,9 @@ let names = map(users, fset('connections', c => c + 1));
 
 ## Installation
 
-NPM  : `npm install datamix`
+NPM  : `npm install @warang580/datamix`
 
-Yarn : `yarn add datamix`
+Yarn : `yarn add @warang580/datamix`
 
 ## Usage
 
