@@ -145,6 +145,8 @@ let Data = require("@warang580/datamix");
 
 # CHANGELOG
 
+Note: update package.json > version too
+
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
 ## [1.1.0](https://github.com/warang580/datamix/compare/1.0.1...1.1.0) (2020-10-24)
