@@ -5,15 +5,28 @@ Manipulate data of different types with the same consistent API
 
 **No dependencies included**
 
+## Installation
+
+NPM  : `npm install @warang580/datamix`
+Yarn : `yarn add @warang580/datamix`
+
+## Usage
+
+```js
+// ES6
+import Data from "@warang580/datamix";
+```
+
+```js
+// NodeJS
+let Data = require("@warang580/datamix");
+```
+
 ## Examples
 
 Reminder: all functions work on arrays AND objects.
 
-@TODO: show function signature so usage is more clear
-
-### get
-
-Signature : `get(data, path, notFoundValue = undefined)`
+### `get(data, path, notFoundValue = undefined)`
 
 ```js
 import { get } from "@warang580/datamix";
@@ -24,9 +37,7 @@ let userId   = get(response, 'data.user.id'); // => <someId> or `undefined`
 let userName = get(response, ['users', user.id, 'name'], "unknown"); // => <name> or "unknown"
 ```
 
-### set
-
-Signature : `set(data, path, newValue)`
+### `set(data, path, newValue)`
 
 ```js
 import { set } from "@warang580/datamix";
@@ -56,17 +67,15 @@ user /* => {
 } */
 ```
 
-### only
-
-Signature : `only(data, paths, withMissing = true)`
+### `only(data, paths, withMissing = true)`
 
 ```js
 import { only } from "@warang580/datamix";
 
-only({x:1, y:2}, ['x'])      // =>  {x:1}
-only({a:0}, {foo: 'a'})      // =>  {foo:0}
-only({}, ['a'])              // =>  {a:undefined}
-only({}, ['a'], false)       // =>  {}
+only({x:1, y:2}, ['x']) // =>  {x: 1}
+only({a:0}, {foo: 'a'}) // =>  {foo: 0}
+only({}, ['a'])         // =>  {a: undefined}
+only({}, ['a'], false)  // =>  {}
 
 only(
   {a: {x: 1, y: 2}, b: {z: 3}},
@@ -74,9 +83,7 @@ only(
 ) // => {foo: {a: 1, b: 3}}
 ```
 
-### getFirst
-
-Signature : `getFirst(data, paths, defaultValue = undefined)`
+### `getFirst(data, paths, defaultValue = undefined)`
 
 ```js
 import { getFirst } from "@warang580/datamix";
@@ -89,16 +96,14 @@ let user = {
 let number = getFirst(user, ['mobile_phone', 'home_phone', 'work_phone'], "?"); // => "0123"
 ```
 
-### getAll
-
-Signature : `getFirst(data, path, withPaths = false)`
+### `getFirst(data, path, withPaths = false)`
 
 ```js
 import { getAll } from "@warang580/datamix";
 
 let users = [{
   name: "Jane",
-  contacts: [{email: "jane@mail.com"}, {email: "fred@mail.com"}],
+  contacts: [{email: "paul@mail.com"}, {email: "fred@mail.com"}],
 }, {
   name: "Fred",
   contacts: [{email: "john@mail.com"}, {email: "judy@mail.com"}],
@@ -121,9 +126,7 @@ getAll({list: [
 } */
 ```
 
-### isIterable
-
-Signature : `isIterable(data)`
+### `isIterable(data)`
 
 Tells you if data can be iterated upon (null and undefined are handled as an empty array)
 
@@ -138,9 +141,7 @@ isIterable("hello")     // => false
 isIterable(42)          // => false
 ```
 
-### map
-
-Signature : `map(data, (v, k, data) => {...})`
+### `map(data, (v, k, data) => {...})`
 
 ```js
 import { map, get } from "@warang580/datamix";
@@ -149,9 +150,7 @@ let users = [/* ... */];
 let names = map(users, user => get(user, 'name', 'unknown'));
 ```
 
-### filter
-
-Signature : `filter(data, (v, k, data) => {...})`
+### `filter(data, (v, k, data) => {...})`
 
 ```js
 import { filter, get } from "@warang580/datamix";
@@ -160,9 +159,7 @@ let users  = [/* ... */];
 let admins = filter(users, user => get(user, 'is_admin', false));
 ```
 
-### reduce
-
-Signature : `reduce(data, (acc, v, k, data) => {...})`
+### `reduce(data, (acc, v, k, data) => {...})`
 
 ```js
 import { get, reduce } from "@warang580/datamix";
@@ -179,9 +176,7 @@ let total = reduce(
 ); // => 26
 ```
 
-### each
-
-Signature : `each(data, (v, k, data) => {...})`
+### `each(data, (v, k, data) => {...})`
 
 ```js
 import { each } from "@warang580/datamix";
@@ -191,9 +186,7 @@ let names = {"Jade", "John", "Fred"};
 each(names, name => console.log("Hello", name));
 ```
 
-### eachSync
-
-Signature : `eachSync(data, async (v, k, data) => {...})`
+### `eachSync(data, async (v, k, data) => {...})`
 
 ```js
 import { eachSync } from "@warang580/datamix";
@@ -207,9 +200,7 @@ eachSync(users, async user => {
 // Everything is done here
 ```
 
-### copy
-
-Signature : `copy(data)`
+### `copy(data)`
 
 ```js
 import { copy } from "@warang580/datamix";
@@ -224,9 +215,7 @@ numbers.push(5);
 previous // => [1, 2, 3, 4]
 ```
 
-### parseJson
-
-Signature : `parseJson(raw, defaultValue = {})`
+### `parseJson(raw, defaultValue = {})`
 
 ```js
 import { parseJson } from "@warang580/datamix";
@@ -236,9 +225,7 @@ let res = '{"foo":"bar"}';
 parseJson(res) // => {foo: "bar"}
 ```
 
-### _get (functional version of get)
-
-Signature : `_get(path, defaultValue = undefined)`
+### `_get(path, defaultValue = undefined)` (functional version of get)
 
 ```js
 import { map, _get, get } from "@warang580/datamix";
@@ -248,9 +235,7 @@ let names = map(users, _get('name', 'unknown'));
 let names = map(users, user => get(user, 'name', 'unknown'));
 ```
 
-### _set (functional version of set)
-
-Signature : `_set(path, newValue)`
+### `_set(path, newValue)` (functional version of set)
 
 ```js
 import { map, set, _set } from "@warang580/datamix";
@@ -260,9 +245,7 @@ let names = map(users, _set('connections', c => c + 1));
 let names = map(users, user => set(user, 'connections', c => c + 1));
 ```
 
-### _only (functional version of only)
-
-Signature : `_only(paths)`
+### `_only(paths)` (functional version of only)
 
 ```js
 import { map, only, _only } from "@warang580/datamix";
@@ -272,9 +255,7 @@ let u = map(users, _only(['name', 'email']));
 let u = map(users, user => only(user, ['name', 'email']));
 ```
 
-### _getFirst (functional version of getFirst)
-
-Signature : `_getFirst(paths)`
+### `_getFirst(paths)` (functional version of getFirst)
 
 ```js
 import { map, getFirst, _getFirst } from "@warang580/datamix";
@@ -284,9 +265,7 @@ let email = map(users, _getFirst(['email', 'login.email', 'contact.email']));
 let email = map(users, user => getFirst(user, ['email', 'login.email', 'contact.email']));
 ```
 
-### _getAll (functional version of getAll)
-
-Signature : `_getAll(paths)`
+### `_getAll(paths)` (functional version of getAll)
 
 ```js
 import { map, getAll, _getAll } from "@warang580/datamix";
@@ -294,24 +273,6 @@ import { map, getAll, _getAll } from "@warang580/datamix";
 let roleIds = map(users, _getAll('roles.*.id'));
 // is equivalent to
 let roleIds = map(users, user => getAll(user, 'roles.*.id'));
-```
-
-## Installation
-
-NPM  : `npm install @warang580/datamix`
-
-Yarn : `yarn add @warang580/datamix`
-
-## Usage
-
-```js
-// ES6
-import Data from "@warang580/datamix";
-```
-
-```js
-// NodeJS
-let Data = require("@warang580/datamix");
 ```
 
 # ROADMAP
