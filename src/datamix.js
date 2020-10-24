@@ -15,6 +15,14 @@ let isObject = function (data) {
 }
 
 /**
+ * Tells if data is nil (undefined or null)
+ * (not part of public API, just here to avoid duplications)
+ */
+let isNil = function (data) {
+  return data === undefined || data === null;
+}
+
+/**
  * Copy (~clone) existing data to avoid side-effects
  */
 let copy = function (data) {
@@ -29,13 +37,8 @@ let copy = function (data) {
  * Ex: get(user, 'address.street.number', '-')
  */
 let get = function (data, path, notFoundValue = undefined) {
-  // Catching PHP "undefined"
-  if (data === null) {
-    data = undefined;
-  }
-
   // We didn't found anything, return default value
-  if (data === undefined) {
+  if (isNil(data)) {
     return notFoundValue;
   }
 
@@ -85,11 +88,15 @@ let map = function (data, callback) {
     return data.map(callback);
   }
 
-  // Use our own reducer to implement map on objects
-  return reduce(data, (object, value, key) => {
-    object[key] = callback(data[key], key, data);
-    return object;
-  }, {});
+  if (isObject(data)) {
+    // Use our own reducer to implement map on objects
+    return reduce(data, (object, value, key) => {
+      object[key] = callback(data[key], key, data);
+      return object;
+    }, {});
+  }
+
+  return data;
 }
 
 /**
@@ -103,13 +110,17 @@ let filter = function (data, callback) {
     return data.filter(callback);
   }
 
-  // Use our own reducer to implement filter on objects
-  return reduce(data, (object, value, key) => {
-    if (callback(data[key], key, data)) {
-      object[key] = data[key];
-    }
-    return object;
-  }, {});
+  if (isObject(data)) {
+    // Use our own reducer to implement filter on objects
+    return reduce(data, (object, value, key) => {
+      if (callback(data[key], key, data)) {
+        object[key] = data[key];
+      }
+      return object;
+    }, {});
+  }
+
+  return data;
 }
 
 /**
@@ -139,7 +150,7 @@ let set = function (data, path, newValue) {
   let tail   = path.slice(1);
 
   // Transforming undefined variables into empty objects
-  if (data === undefined) {
+  if (isNil(data)) {
     data = {};
   }
 

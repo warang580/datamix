@@ -33,6 +33,11 @@ describe("get", () => {
   it("handles a string notation for path too", function () {
     expect(datamix.get({a: {b: {c: "d"}}}, 'a.b.c')).toBe("d");
   });
+
+  it("can handle 'empty' values as base value", function () {
+    expect(datamix.get(null,      ['foo'], "bar")).toStrictEqual("bar");
+    expect(datamix.get(undefined, ['foo'], "bar")).toStrictEqual("bar");
+  });
 });
 
 describe("reduce", () => {
@@ -44,6 +49,11 @@ describe("reduce", () => {
   it("behaves like Array.reduce on objects", function () {
     expect(datamix.reduce({a:1, b:2, c:3}, (s, v) => s + v, 1))
       .toStrictEqual(7);
+  });
+
+  it("ignores 'empty' values", function () {
+    expect(datamix.reduce(null, (s, v) => s + v, 1)).toStrictEqual(1);
+    expect(datamix.reduce(undefined, (s, v) => s + v, 1)).toStrictEqual(1);
   });
 });
 
@@ -66,6 +76,16 @@ describe("each", () => {
 
     expect(callback.calledWith(1, "a", object)).toBe(true);
     expect(callback.calledWith(2, "b", object)).toBe(true);
+  });
+
+  it("ignores 'empty' values", function () {
+    let callback = sinon.fake();
+    let object   = {a: 1, b: 2};
+
+    datamix.each(null,      callback);
+    datamix.each(undefined, callback);
+
+    expect(callback.called).toBe(false);
   });
 });
 
@@ -105,6 +125,27 @@ describe("eachSync", () => {
       ["baz", "15", {"5": "foo", "10": "bar", "15": "baz"}]
     ]);
   });
+
+  it("ignores 'empty' values", async function () {
+    let calls = [];
+
+    await datamix.eachSync(undefined, async (v, k, o) => {
+      // Each call is shorter so we can test that it's made in correct order
+      let res = await new Promise(resolve => setTimeout(() => resolve([v, k, o]), 15 - v))
+
+      calls.push(res);
+    });
+
+    await datamix.eachSync(null, async (v, k, o) => {
+      // Each call is shorter so we can test that it's made in correct order
+      let res = await new Promise(resolve => setTimeout(() => resolve([v, k, o]), 15 - v))
+
+      calls.push(res);
+    });
+
+    // Checking that calls were made in order
+    expect(calls).toStrictEqual([]);
+  });
 });
 
 describe("map", () => {
@@ -117,6 +158,11 @@ describe("map", () => {
     expect(datamix.map({a:1, b:2, c:3}, v => v + 1))
       .toStrictEqual({a:2, b:3, c:4});
   });
+
+  it("ignores 'empty' values", function () {
+    expect(datamix.map(null,      v => v + 1)).toStrictEqual(null);
+    expect(datamix.map(undefined, v => v + 1)).toStrictEqual(undefined);
+  });
 });
 
 describe("filter", () => {
@@ -128,6 +174,11 @@ describe("filter", () => {
   it("behaves like Array.filter on objects", function () {
     expect(datamix.filter({a:1, b:2, c:3}, v => v >= 2))
       .toStrictEqual({b:2, c:3});
+  });
+
+  it("ignores 'empty' values", function () {
+    expect(datamix.filter(null,      v => v >= 2)).toStrictEqual(null);
+    expect(datamix.filter(undefined, v => v >= 2)).toStrictEqual(undefined);
   });
 });
 
@@ -163,6 +214,11 @@ describe("set", () => {
   it("handles string notation", function () {
     expect(datamix.set({a: {b: {c: "d"}}}, 'a.b.e', "f"))
       .toStrictEqual({a: {b: {c: "d", e: "f"}}});
+  });
+
+  it("uses 'empty' base values as an object", function () {
+    expect(datamix.set(null,      ['foo'], "bar")).toStrictEqual({foo: "bar"});
+    expect(datamix.set(undefined, ['foo'], "bar")).toStrictEqual({foo: "bar"});
   });
 });
 
