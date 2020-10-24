@@ -316,8 +316,9 @@ let Data = require("@warang580/datamix");
 
 # ROADMAP
 
+- _parseJson ?
 - mergeWith((v1, v2, k?) => {/* ... */}, ...data)
-- transducers (t => t.map() t.filter() ?) ?
+- transducers ? (t => t.map() t.filter() ?)
 
 # CHANGELOG
 
