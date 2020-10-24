@@ -120,6 +120,27 @@ numbers.push(5);
 previous // => [1, 2, 3, 4]
 ```
 
+### fget
+
+```js
+import { map, fget, get } from "@warang580/datamix";
+
+let names = map(users, fget('name', 'unknown'));
+// is equivalent to
+let names = map(users, user => get(user, 'name', 'unknown'));
+```
+
+### fset
+
+```js
+import { set, fset } from "@warang580/datamix";
+
+// with set
+let names = map(users, user => set(user, 'connections', c => c + 1));
+// with fset
+let names = map(users, fset('connections', c => c + 1));
+```
+
 ## Installation
 
 NPM  : `npm install datamix`
@@ -140,9 +161,8 @@ let Data = require("@warang580/datamix");
 
 # ROADMAP
 
-- partial get/set
-- functional versions for map/filter/reduce/etc.
-- transducers with these functions (suffix or get fcts from "mix")
+- only()
+- transducers (t => t.map() t.filter() ?)
 
 # CHANGELOG
 
@@ -150,6 +170,7 @@ Note: update package.json > version too
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+- Feature: `fget` and `fset` are functional versions of get and set (for map/filter/reduce)
 - Bugfix: handle "empty" paths correctly ("", null, undefined)
 - Bugfix: you can get/set array by numerical indexes
 

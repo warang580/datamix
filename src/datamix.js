@@ -46,6 +46,17 @@ let normalizePath = function (path) {
 }
 
 /**
+ * Make a functional version of an existing function
+ * (not part of public API, just here to avoid duplications)
+ */
+let makeFunctional = function (fn) {
+  // @TODO: postArgs is not collected, check function arity ? or n second arg ? or boolean for "first"
+  return (...preArgs) => (postArgs) => {
+    return fn(postArgs, ...preArgs);
+  }
+}
+
+/**
  * Copy (~clone) existing data to avoid side-effects
  */
 let copy = function (data) {
@@ -218,6 +229,9 @@ let eachSync = async function (data, callback) {
   }
 }
 
+/**
+ * Compute the size of data
+ */
 let size = function (data) {
   if (isNil(data))    return 0;
   if (isArray(data))  return data.length;
@@ -226,4 +240,13 @@ let size = function (data) {
   return undefined;
 }
 
-module.exports = { copy, size, get, set, reduce, map, filter, each, eachSync }
+/**
+ * Function versions of get, set, etc.
+ */
+let fget = makeFunctional(get);
+let fset = makeFunctional(set);
+
+/**
+ * Exporting functions
+ */
+module.exports = { copy, size, get, fget, set, fset, reduce, map, filter, each, eachSync }

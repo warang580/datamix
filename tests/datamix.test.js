@@ -297,7 +297,22 @@ describe("fget", () => {
 
     expect(datamix.map(users, datamix.fget('name', 'unnamed'))).toStrictEqual(["Jane", "Fred", "unnamed"]);
   });
+});
+
 describe("fset", () => {
+  it("returns a functional version of set", function () {
     let users = [{
       connections: 1,
+    }, {
+      connections: 2,
+    }, {
+      // never connected
+    }];
 
+    expect(
+      datamix
+        .map(users, datamix.fset('connections', c => (c||0) + 1))
+        .map(datamix.fget('connections', 0))
+    ).toStrictEqual([2, 3, 1]);
+  });
+});
