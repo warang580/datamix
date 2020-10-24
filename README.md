@@ -150,6 +150,8 @@ Note: update package.json > version too
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+- Bugfix: you can get/set array by numerical indexes
+
 ## [1.1.0](https://github.com/warang580/datamix/compare/1.0.1...1.1.0) (2020-10-24)
 
 - Feature: `size(data)` returns the number of elements in data

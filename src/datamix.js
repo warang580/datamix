@@ -42,6 +42,12 @@ let get = function (data, path, notFoundValue = undefined) {
     return notFoundValue;
   }
 
+
+  // Transform number like 2 into "2" so it can be split
+  if (typeof path === "number") {
+    path = String(path);
+  }
+
   // Transform path into array if it's not the case already
   if (typeof path === "string") {
     path = path.split(".");
@@ -130,6 +136,11 @@ let filter = function (data, callback) {
 let set = function (data, path, newValue) {
   // @TODO: use anonymous function to avoid copying too much data by scoping
   data = copy(data);
+
+  // Transform number like 2 into "2" so it can be split
+  if (typeof path === "number") {
+    path = String(path);
+  }
 
   // Transform path into array if it's not the case already
   if (typeof path === "string") {

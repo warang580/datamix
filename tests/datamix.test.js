@@ -19,8 +19,10 @@ describe("get", () => {
   });
 
   it("gets value in indexed array", function () {
-    expect(datamix.get(["a", "b", "c"], ["1"])).toBe("b");
-    expect(datamix.get(["a", "b", "c"], [2]))  .toBe("c");
+    expect(datamix.get(["a", "b", "c", "d"], "0"))  .toBe("a");
+    expect(datamix.get(["a", "b", "c", "d"], ["1"])).toBe("b");
+    expect(datamix.get(["a", "b", "c", "d"], [2]))  .toBe("c");
+    expect(datamix.get(["a", "b", "c", "d"], 3))    .toBe("d");
   });
 
   it("can handle falsy values", function () {
@@ -213,6 +215,12 @@ describe("set", () => {
   it("sets data in an existing array", function () {
     expect(datamix.set(["a", "b", "c", "d"], [2], "x"))
       .toStrictEqual(["a", "b", "x", "d"]);
+
+    expect(datamix.set(["a", "b", "c", "d"], '2', "x"))
+      .toStrictEqual(["a", "b", "x", "d"]);
+
+    expect(datamix.set(["a", "b", "c", "d"], 2, "x"))
+      .toStrictEqual(["a", "b", "x", "d"]);
   });
 
   it("udpates data in an existing object", function () {
@@ -273,3 +281,20 @@ describe("copy", () => {
     });
   });
 });
+
+describe("fget", () => {
+  it("returns a functional version of get", function () {
+    let users = [{
+      name: "Jane",
+    }, {
+      name: "Fred",
+    }, {
+      // unnamed
+    }];
+
+    expect(datamix.map(users, datamix.fget('name', 'unnamed'))).toStrictEqual(["Jane", "Fred", "unnamed"]);
+  });
+describe("fset", () => {
+    let users = [{
+      connections: 1,
+
