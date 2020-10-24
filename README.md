@@ -140,6 +140,7 @@ let Data = require("@warang580/datamix");
 
 # ROADMAP
 
+- partial get/set
 - functional versions for map/filter/reduce/etc.
 - transducers with these functions (suffix or get fcts from "mix")
 
