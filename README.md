@@ -13,6 +13,8 @@ Reminder: all functions work on arrays AND objects.
 
 ### get
 
+Signature : `get(data, path, notFoundValue = undefined)`
+
 ```js
 import { get } from "@warang580/datamix";
 
@@ -23,6 +25,8 @@ let userName = get(response, ['users', user.id, 'name'], "unknown"); // => <name
 ```
 
 ### set
+
+Signature : `set(data, path, newValue)`
 
 ```js
 import { set } from "@warang580/datamix";
@@ -38,6 +42,7 @@ let user = {
 
 // Updating without side-effects
 user = set(user, 'age', 50);
+// newValue can be a function with current value as argument
 user = set(user, 'auth.connections', c => c + 1);
 
 user /* => {
@@ -52,6 +57,8 @@ user /* => {
 ```
 
 ### only
+
+Signature : `only(data, paths, withMissing = true)`
 
 ```js
 import { only } from "@warang580/datamix";
@@ -69,6 +76,8 @@ only(
 
 ### getFirst
 
+Signature : `getFirst(data, paths, defaultValue = undefined)`
+
 ```js
 import { getFirst } from "@warang580/datamix";
 
@@ -81,6 +90,8 @@ let number = getFirst(user, ['mobile_phone', 'home_phone', 'work_phone'], "?"); 
 ```
 
 ### getAll
+
+Signature : `getFirst(data, path, withPaths = false)`
 
 ```js
 import { getAll } from "@warang580/datamix";
@@ -112,7 +123,9 @@ getAll({list: [
 
 ### isIterable
 
-Tells you if the value can be iterated upon (null and undefined are handled as an empty array)
+Signature : `isIterable(data)`
+
+Tells you if data can be iterated upon (null and undefined are handled as an empty array)
 
 ```js
 import { isIterable } from "@warang580/datamix";
@@ -127,6 +140,8 @@ isIterable(42)          // => false
 
 ### map
 
+Signature : `map(data, (v, k, data) => {...})`
+
 ```js
 import { map, get } from "@warang580/datamix";
 
@@ -136,6 +151,8 @@ let names = map(users, user => get(user, 'name', 'unknown'));
 
 ### filter
 
+Signature : `filter(data, (v, k, data) => {...})`
+
 ```js
 import { filter, get } from "@warang580/datamix";
 
@@ -143,8 +160,9 @@ let users  = [/* ... */];
 let admins = filter(users, user => get(user, 'is_admin', false));
 ```
 
-
 ### reduce
+
+Signature : `reduce(data, (acc, v, k, data) => {...})`
 
 ```js
 import { get, reduce } from "@warang580/datamix";
@@ -163,6 +181,8 @@ let total = reduce(
 
 ### each
 
+Signature : `each(data, (v, k, data) => {...})`
+
 ```js
 import { each } from "@warang580/datamix";
 
@@ -172,6 +192,8 @@ each(names, name => console.log("Hello", name));
 ```
 
 ### eachSync
+
+Signature : `eachSync(data, async (v, k, data) => {...})`
 
 ```js
 import { eachSync } from "@warang580/datamix";
@@ -186,6 +208,8 @@ eachSync(users, async user => {
 ```
 
 ### copy
+
+Signature : `copy(data)`
 
 ```js
 import { copy } from "@warang580/datamix";
@@ -202,6 +226,8 @@ previous // => [1, 2, 3, 4]
 
 ### parseJson
 
+Signature : `parseJson(raw, defaultValue = {})`
+
 ```js
 import { parseJson } from "@warang580/datamix";
 
@@ -211,6 +237,8 @@ parseJson(res) // => {foo: "bar"}
 ```
 
 ### _get (functional version of get)
+
+Signature : `_get(path, defaultValue = undefined)`
 
 ```js
 import { map, _get, get } from "@warang580/datamix";
@@ -222,8 +250,10 @@ let names = map(users, user => get(user, 'name', 'unknown'));
 
 ### _set (functional version of set)
 
+Signature : `_set(path, newValue)`
+
 ```js
-import { set, _set } from "@warang580/datamix";
+import { map, set, _set } from "@warang580/datamix";
 
 let names = map(users, _set('connections', c => c + 1));
 // is equivalent to
@@ -232,8 +262,10 @@ let names = map(users, user => set(user, 'connections', c => c + 1));
 
 ### _only (functional version of only)
 
+Signature : `_only(paths)`
+
 ```js
-import { only, _only } from "@warang580/datamix";
+import { map, only, _only } from "@warang580/datamix";
 
 let u = map(users, _only(['name', 'email']));
 // is equivalent to
@@ -242,12 +274,26 @@ let u = map(users, user => only(user, ['name', 'email']));
 
 ### _getFirst (functional version of getFirst)
 
+Signature : `_getFirst(paths)`
+
 ```js
-import { getFirst, _getFirst } from "@warang580/datamix";
+import { map, getFirst, _getFirst } from "@warang580/datamix";
 
 let email = map(users, _getFirst(['email', 'login.email', 'contact.email']));
 // is equivalent to
 let email = map(users, user => getFirst(user, ['email', 'login.email', 'contact.email']));
+```
+
+### _getAll (functional version of getAll)
+
+Signature : `_getAll(paths)`
+
+```js
+import { map, getAll, _getAll } from "@warang580/datamix";
+
+let roleIds = map(users, _getAll('roles.*.id'));
+// is equivalent to
+let roleIds = map(users, user => getAll(user, 'roles.*.id'));
 ```
 
 ## Installation
