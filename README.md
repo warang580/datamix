@@ -147,6 +147,8 @@ let Data = require("@warang580/datamix");
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+## [1.1.0](https://github.com/warang580/datamix/compare/1.0.1...1.1.0) (2020-10-24)
+
 - Feature: `size(data)` returns the number of elements in data
 
 ## [1.0.1](https://github.com/warang580/datamix/compare/v1.0.0...1.0.1) (2020-10-24)
