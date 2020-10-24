@@ -166,9 +166,11 @@ let Data = require("@warang580/datamix");
 
 # CHANGELOG
 
-Note: update package.json > version too
+(NOTE: update package.json > version too)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
+
+## [1.2.0](https://github.com/warang580/datamix/compare/1.1.0...1.2.0) (2020-10-24)
 
 - Feature: `fget` and `fset` are functional versions of get and set (for map/filter/reduce)
 - Bugfix: handle "empty" paths correctly ("", null, undefined)
