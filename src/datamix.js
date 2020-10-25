@@ -335,6 +335,17 @@ let getAll = function (data, path, withPaths = false) {
 };
 
 /**
+ * Set all data matching wildcard paths
+ */
+let setAll = function (data, path, newValue) {
+  let paths = getAll(data, path, true);
+
+  return reduce(paths, (data, _, path) => {
+    return set(data, path, newValue);
+  }, data);
+}
+
+/**
 * Make a functional version of an existing function
 * (not part of public API, just here to avoid duplications)
 */
@@ -385,6 +396,7 @@ module.exports = {
   getAll, _getAll,
   only, _only,
   set, _set,
+  setAll,
   keys, values,
   isIterable,
   reduce,

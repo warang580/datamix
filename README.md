@@ -147,6 +147,12 @@ getAll({list: [
 } */
 ```
 
+### `setAll(list, wildcardPath, newValue)`
+
+```js
+setAll(list, "players.*.isDead", false)
+```
+
 ### `isIterable(data)`
 
 Tells you if data can be iterated upon (`undefined` and `null` are handled like an empty iterable)
@@ -338,12 +344,6 @@ plain(data)       // => {'a': 1, 'b.x': 2, 'b.y': [3, 4], 'c': ['foo', 'bar']}
 plain(data, true) // => {'a': 1, 'b.x': 2, 'b.y.0': 3, 'b.y.1': 4, 'c.0': 'foo', 'c.1': 'bar'}
 ```
 
-- `setAll(list, wildcardPath, newValue)`
-
-```js
-setAll(list, "players.*.isDead", false)
-```
-
 - `setWith(list, pathValuePairs)`
 
 ```js
@@ -366,6 +366,7 @@ list = map(_parseJson)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+- Feature: `setAll(data, wildcardPath, newValue)`
 - Feature: `keys(data)`
 - Feature: `values(data)`
 - Feature: `defaultsTo(data, defaultValue = [])`
