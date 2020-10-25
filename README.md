@@ -27,6 +27,12 @@ let Data = require("@warang580/datamix");
 
 Reminder: all functions work on arrays AND objects.
 
+### `defaultsTo(data, defaultValue = [])`
+
+```js
+let config = defaultsTo(getConfig(/* ... */), {})
+```
+
 ### `get(data, path, notFoundValue = undefined)`
 
 ```js
@@ -282,6 +288,9 @@ let roleIds = map(users, user => getAll(user, 'roles.*.id'));
 
 # ROADMAP
 
+- Not sure if `isIterable(undefined) // => true` is a good idea ...
+  - even if I defaultsTo(data, []) it's not very clean
+
 - `values(data)`
 
 ```js
@@ -337,13 +346,6 @@ setAll(list, "players.*.isDead", false)
 
 ```js
 setWith({a: 1, b: 2, c: [3, 4]}, {'a': -1, 'c.0': 0}) // => {a: -1, b: 2, c: [0, 4]}
-```
-
-- `defaultsTo(data, defaultValue = undefined)`
-
-```js
-defaultsTo(undefined, []) // => []
-defaultsTo([1, 2, 3], []) // => [1, 2, 3]
 ```
 
 - `_parseJson(defaultValue = {})`

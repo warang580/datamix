@@ -347,6 +347,10 @@ let makeFunctional = function (fn) {
   }
 }
 
+let defaultsTo = function (data, defaultValue = []) {
+  return isNil(data) ? defaultValue : data;
+}
+
 /**
 * Functional versions
 */
@@ -363,6 +367,7 @@ let _getAll   = makeFunctional(getAll);
 module.exports = {
   copy,
   size,
+  defaultsTo,
   get, _get,
   getFirst, _getFirst,
   getAll, _getAll,
