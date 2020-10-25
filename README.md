@@ -325,6 +325,8 @@ let roleIds = map(users, user => getAll(user, 'roles.*.id'));
 - Not sure if `isIterable(undefined) // => true` is a good idea ...
   - even if I defaultsTo(data, []) it's not very clean
 
+- implement plain with paths, and entries with plain + reduce
+
 - `entries(data, deep = false, traverseArrays = false)`
 
 ```js
