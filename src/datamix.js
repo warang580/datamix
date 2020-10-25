@@ -351,6 +351,13 @@ let defaultsTo = function (data, defaultValue = []) {
   return isNil(data) ? defaultValue : data;
 }
 
+let values = function (data) {
+  if (isObject(data)) return Object.values(data);
+  if (isArray(data))  return data;
+
+  return [];
+}
+
 /**
 * Functional versions
 */
@@ -373,6 +380,7 @@ module.exports = {
   getAll, _getAll,
   only, _only,
   set, _set,
+  values,
   isIterable,
   reduce,
   map,

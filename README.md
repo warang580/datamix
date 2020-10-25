@@ -92,6 +92,12 @@ only(
 ) // => {foo: {a: 1, b: 3}}
 ```
 
+### `values(data)`
+
+```js
+values({a: 1, b, 2, c: {x: 3, y: 4}}) // => [1, 2, {x: 3, y: 4}]
+```
+
 ### `getFirst(data, paths, defaultValue = undefined)`
 
 ```js
@@ -288,14 +294,10 @@ let roleIds = map(users, user => getAll(user, 'roles.*.id'));
 
 # ROADMAP
 
+- deferData(fn, ...args) [import {deferData: _}] ? or remove functional versions ?
+
 - Not sure if `isIterable(undefined) // => true` is a good idea ...
   - even if I defaultsTo(data, []) it's not very clean
-
-- `values(data)`
-
-```js
-list = values({a: 1, b, 2, c: {x: 3, y: 4}}) // => [1, 2, {x: 3, y: 4}]
-```
 
 - `keys(data)`
 
