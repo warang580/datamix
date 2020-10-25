@@ -226,7 +226,6 @@ let eachSync = async function (data, callback) {
  * Compute the size of data
  */
 let size = function (data) {
-  if (isNil(data))    return 0;
   if (isArray(data))  return data.length;
   if (isObject(data)) return Object.keys(data).length;
 
@@ -335,6 +334,17 @@ let getAll = function (data, path, withPaths = false) {
 };
 
 /**
+ * Set all data matching wildcard paths
+ */
+let setAll = function (data, path, newValue) {
+  let paths = getAll(data, path, true);
+
+  return reduce(paths, (data, _, path) => {
+    return set(data, path, newValue);
+  }, data);
+}
+
+/**
 * Make a functional version of an existing function
 * (not part of public API, just here to avoid duplications)
 */
@@ -345,6 +355,57 @@ let makeFunctional = function (fn) {
   return (...args) => (data) => {
     return fn(data, ...args);
   }
+}
+
+let defaultsTo = function (data, defaultValue = []) {
+  return isNil(data) ? defaultValue : data;
+}
+
+let keys = function (data) {
+  return reduce(data, (keys, _, key) => {
+    return keys.concat([key]);
+  }, []);
+}
+
+let values = function (data) {
+  return reduce(data, (values, value) => {
+    return values.concat([value]);
+  }, []);
+}
+
+let paths = function (data, traverseArrays = false) {
+  // Make a recursive function to iterate over all branches
+  let pathsRec = function (data, currentPath) {
+    // Iterate on all current branches
+    return reduce(data, (paths, value, key) => {
+      let subpath = currentPath.concat([key]);
+
+      // Merge path-value pairs of sub-branch
+      if (isIterable(value)) {
+        // Empty array/object
+        if (size(value) === 0) {
+          paths[subpath.join('.')] = isArray(value) ? [] : {};
+        }
+        // Array that we might not want to traverse
+        else if (! traverseArrays && isArray(value)) {
+          paths[subpath.join('.')] = value;
+        }
+        // Recursively fetch sub branches
+        else {
+          paths = Object.assign(paths, pathsRec(value, subpath));
+        }
+      }
+      // Assign current {path: value} pair
+      else {
+        paths[subpath.join('.')] = value;
+      }
+
+      return paths;
+    }, {});
+  }
+
+  // Start recursivity with an empty currentPath
+  return pathsRec(data, []);
 }
 
 /**
@@ -363,11 +424,15 @@ let _getAll   = makeFunctional(getAll);
 module.exports = {
   copy,
   size,
+  defaultsTo,
   get, _get,
   getFirst, _getFirst,
   getAll, _getAll,
   only, _only,
   set, _set,
+  setAll,
+  keys, values,
+  paths,
   isIterable,
   reduce,
   map,

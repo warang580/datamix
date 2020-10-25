@@ -54,14 +54,14 @@ describe("size", () => {
     expect(datamix.size({foo: 'bar', baz: 'bee'})).toBe(2);
   });
 
-  it("returns 0 for empty|nil data", function () {
-    [[], {}, undefined, null].forEach(e => {
+  it("returns 0 for empty iterables", function () {
+    [[], {}].forEach(e => {
       expect(datamix.size(e)).toStrictEqual(0);
     })
   });
 
-  it("returns undefined for simple data", function () {
-    [42, 3.14, "hello"].forEach(e => {
+  it("returns undefined for simple data and nil", function () {
+    [42, 3.14, "hello", undefined, null].forEach(e => {
       expect(datamix.size(e)).toStrictEqual(undefined);
     })
   });
@@ -69,13 +69,13 @@ describe("size", () => {
 
 describe("isIterable", () => {
   it("returns true for iterable data", function () {
-    [[], {}, undefined, null].forEach(e => {
+    [[], {}].forEach(e => {
       expect(datamix.isIterable(e)).toStrictEqual(true);
     })
   });
 
   it("returns false for non-iterable data", function () {
-    [42, 3.14, "hello"].forEach(e => {
+    [42, 3.14, "hello", undefined, null].forEach(e => {
       expect(datamix.isIterable(e)).toStrictEqual(false);
     })
   });
@@ -266,6 +266,24 @@ describe("set", () => {
   it("uses 'empty' base values as an object", function () {
     expect(datamix.set(null,      ['foo'], "bar")).toStrictEqual({foo: "bar"});
     expect(datamix.set(undefined, ['foo'], "bar")).toStrictEqual({foo: "bar"});
+  });
+});
+
+describe("setAll", () => {
+  it("sets data in all paths", function () {
+    expect(datamix.setAll([
+      {id: 1, active: false}, {id: 2, active: true}, {id: 3, active: false}
+    ], '*.active', true)).toStrictEqual([
+      {id: 1, active: true}, {id: 2, active: true}, {id: 3, active: true}
+    ]);
+  });
+
+  it("can use callback to set value", function () {
+    expect(datamix.setAll([
+      {id: 1, active: false}, {id: 2, active: true}, {id: 3, active: false}
+    ], '*.active', a => ! a)).toStrictEqual([
+      {id: 1, active: true}, {id: 2, active: false}, {id: 3, active: true}
+    ]);
   });
 });
 
@@ -537,5 +555,123 @@ describe("_getAll", () => {
     expect(
       datamix.map(users, datamix._getAll("contacts.*.email"))
     ).toStrictEqual([["jane@mail.com", "john@mail.com"], ["fred@mail.com", "judy@mail.com"]]);
+  });
+});
+
+describe("defaultsTo", () => {
+  it("returns value itself if non-nil", function () {
+    expect(datamix.defaultsTo(['a', 'b'])).toStrictEqual(['a', 'b']);
+  });
+
+  it("returns array by default if value is nil", function () {
+    expect(datamix.defaultsTo(undefined)).toStrictEqual([]);
+  });
+
+  it("returns defaultValue when set if value is nil", function () {
+    expect(datamix.defaultsTo(undefined, {})).toStrictEqual({});
+  });
+});
+
+describe("keys", () => {
+  it("returns array indexes", function () {
+    expect(datamix.keys(['a', 'b'])).toStrictEqual([0, 1]);
+  });
+
+  it("returns object keys", function () {
+    expect(datamix.keys({a: 1, b: 2})).toStrictEqual(['a', 'b']);
+  });
+
+  it("returns empty array for nil keys", function () {
+    expect(datamix.keys(undefined)).toStrictEqual([]);
+  });
+});
+
+describe("values", () => {
+  it("returns array values as-is", function () {
+    expect(datamix.values(['a', 'b'])).toStrictEqual(['a', 'b']);
+  });
+
+  it("returns object values", function () {
+    expect(datamix.values({a: 1, b: 2})).toStrictEqual([1, 2]);
+  });
+
+  it("returns empty array for nil values", function () {
+    expect(datamix.values(undefined)).toStrictEqual([]);
+  });
+});
+
+describe("paths", () => {
+  it("returns empty objects as is", function () {
+    expect(datamix.paths({})).toStrictEqual({});
+  });
+
+  it("returns an entry for empty objects", function () {
+    expect(datamix.paths({o: {}})).toStrictEqual({o: {}});
+  });
+
+  it("returns an entry for empty arrays", function () {
+    expect(datamix.paths({l: []})).toStrictEqual({l: []});
+  });
+
+  it("returns shallow object as is", function () {
+    expect(datamix.paths({a: 1,  b: 2})).toStrictEqual({a: 1,  b: 2});
+  });
+
+  it("returns paths of deep objects", function () {
+    expect(datamix.paths({
+      a: {x: 1, y: 2},
+      b: 'foo',
+      c: [{bar: 'baz'}],
+    })).toStrictEqual({
+      'a.x': 1,
+      'a.y': 2,
+      'b': 'foo',
+      'c': [{bar: 'baz'}],
+    });
+  });
+
+  it("returns paths of deep objects by traversing arrays", function () {
+    expect(datamix.paths({
+      a: {x: 1, y: 2},
+      b: 'foo',
+      c: [{bar: 'baz'}],
+    }, true)).toStrictEqual({
+      'a.x': 1,
+      'a.y': 2,
+      'b': 'foo',
+      'c.0.bar': 'baz',
+    });
+  });
+
+  it("returns paths of arrays", function () {
+    // NOTE: result === input in this case because there's
+    // only one array that can't be traversed
+    expect(datamix.paths({
+      list: [
+        {a: 1},
+        {b: 2},
+        {d: 4},
+      ]
+    }, false)).toStrictEqual({
+      list: [
+        {a: 1},
+        {b: 2},
+        {d: 4},
+      ]
+    });
+  });
+
+  it("returns paths of arrays by traversing arrays", function () {
+    expect(datamix.paths({
+      list: [
+        {a: 1},
+        {b: 2},
+        {d: 4},
+      ]
+    }, true)).toStrictEqual({
+      'list.0.a': 1,
+      'list.1.b': 2,
+      'list.2.d': 4,
+    });
   });
 });
