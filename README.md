@@ -153,6 +153,20 @@ getAll({list: [
 setAll(list, "players.*.isDead", false)
 ```
 
+### `paths(data, traverseArrays = false)`
+
+```js
+let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
+
+paths(data)       // => ['a', 'b.x', 'b.y', 'c'],
+paths(data, true) // => ['a', 'b.x', 'b.y.0', 'b.y.1', 'c.0', 'c.1'],
+
+let list = [1, {a: 1, b: [3, 4]}, [5, 6]];
+
+paths(list)       // => ['0', '1.a', '1.b', '2']
+paths(list, true) // => ['0', '1.a', '1.b.0', '1.b.1', '2.0', '2.1']
+```
+
 ### `isIterable(data)`
 
 Tells you if data can be iterated upon (`undefined` and `null` are handled like an empty iterable)
@@ -311,21 +325,7 @@ let roleIds = map(users, user => getAll(user, 'roles.*.id'));
 - Not sure if `isIterable(undefined) // => true` is a good idea ...
   - even if I defaultsTo(data, []) it's not very clean
 
-- `paths(data, traversingArrays = false)`
-
-```js
-let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
-
-paths(data)       // => ['a', 'b.x', 'b.y', 'c'],
-paths(data, true) // => ['a', 'b.x', 'b.y.0', 'b.y.1', 'c.0', 'c.1'],
-
-let list = [1, {a: 1, b: [3, 4]}, [5, 6]];
-
-paths(list)       // => ['0', '1.a', '1.b', '2']
-paths(list, true) // => ['0', '1.a', '1.b.0', '1.b.1', '2.0', '2.1']
-```
-
-- `entries(data, deep = false, traversingArrays = false)`
+- `entries(data, deep = false, traverseArrays = false)`
 
 ```js
 let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
@@ -335,7 +335,7 @@ entries(data, true)       // => [['a', 1], ['b.x', 2], ['b.y', [3, 4]], ['c', ['
 entries(data, true, true) // => [['a', 1], ['b.x', 2], ['b.y.0', 3], ['b.y.1', 4], ['c.0', 'foo'], ['c.1', 'bar']]
 ```
 
-- `plain(data, traversingArrays = false)`
+- `plain(data, traverseArrays = false)`
 
 ```js
 let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
@@ -348,6 +348,8 @@ plain(data, true) // => {'a': 1, 'b.x': 2, 'b.y.0': 3, 'b.y.1': 4, 'c.0': 'foo',
 
 ```js
 setWith({a: 1, b: 2, c: [3, 4]}, {'a': -1, 'c.0': 0}) // => {a: -1, b: 2, c: [0, 4]}
+// is equivalent to
+setWith({a: 1, b: 2, c: [3, 4]}, [['a', -1], ['c.0', 0]]) // => {a: -1, b: 2, c: [0, 4]}
 ```
 
 - `_parseJson(defaultValue = {})`
@@ -366,6 +368,9 @@ list = map(_parseJson)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+- Breaking: `size(undefined|null) // => undefined`
+- Breaking: `isIterable(undefined|null) // => false`
+- Feature: `paths(data, traverseArrays = false)`
 - Feature: `setAll(data, wildcardPath, newValue)`
 - Feature: `keys(data)`
 - Feature: `values(data)`

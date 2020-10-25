@@ -226,7 +226,6 @@ let eachSync = async function (data, callback) {
  * Compute the size of data
  */
 let size = function (data) {
-  if (isNil(data))    return 0;
   if (isArray(data))  return data.length;
   if (isObject(data)) return Object.keys(data).length;
 
@@ -374,6 +373,41 @@ let values = function (data) {
   }, []);
 }
 
+let paths = function (data, traverseArrays = false) {
+  // Make a recursive function to iterate over all branches
+  let pathsRec = function (data, currentPath) {
+    // Iterate on all current branches
+    return reduce(data, (paths, value, key) => {
+      let subpath = currentPath.concat([key]);
+
+      // Merge path-value pairs of sub-branch
+      if (isIterable(value)) {
+        // Empty array/object
+        if (size(value) === 0) {
+          paths[subpath.join('.')] = isArray(value) ? [] : {};
+        }
+        // Array that we might not want to traverse
+        else if (! traverseArrays && isArray(value)) {
+          paths[subpath.join('.')] = value;
+        }
+        // Recursively fetch sub branches
+        else {
+          paths = Object.assign(paths, pathsRec(value, subpath));
+        }
+      }
+      // Assign current {path: value} pair
+      else {
+        paths[subpath.join('.')] = value;
+      }
+
+      return paths;
+    }, {});
+  }
+
+  // Start recursivity with an empty currentPath
+  return pathsRec(data, []);
+}
+
 /**
 * Functional versions
 */
@@ -398,6 +432,7 @@ module.exports = {
   set, _set,
   setAll,
   keys, values,
+  paths,
   isIterable,
   reduce,
   map,
