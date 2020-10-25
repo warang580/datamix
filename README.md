@@ -92,6 +92,12 @@ only(
 ) // => {foo: {a: 1, b: 3}}
 ```
 
+### `keys(data)`
+
+```js
+keys({a: 1, b, 2, c: {x: 3, y: 4}}) // ['a', 'b', 'c']
+```
+
 ### `values(data)`
 
 ```js
@@ -299,12 +305,6 @@ let roleIds = map(users, user => getAll(user, 'roles.*.id'));
 - Not sure if `isIterable(undefined) // => true` is a good idea ...
   - even if I defaultsTo(data, []) it's not very clean
 
-- `keys(data)`
-
-```js
-list = keys({a: 1, b, 2, c: {x: 3, y: 4}}) // ['a', 'b', 'c']
-```
-
 - `paths(data, traversingArrays = false)`
 
 ```js
@@ -366,6 +366,7 @@ list = map(_parseJson)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+- Feature: `keys(data)`
 - Feature: `values(data)`
 - Feature: `defaultsTo(data, defaultValue = [])`
 

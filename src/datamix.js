@@ -351,11 +351,16 @@ let defaultsTo = function (data, defaultValue = []) {
   return isNil(data) ? defaultValue : data;
 }
 
-let values = function (data) {
-  if (isObject(data)) return Object.values(data);
-  if (isArray(data))  return data;
+let keys = function (data) {
+  return reduce(data, (keys, _, key) => {
+    return keys.concat([key]);
+  }, []);
+}
 
-  return [];
+let values = function (data) {
+  return reduce(data, (values, value) => {
+    return values.concat([value]);
+  }, []);
 }
 
 /**
@@ -380,7 +385,7 @@ module.exports = {
   getAll, _getAll,
   only, _only,
   set, _set,
-  values,
+  keys, values,
   isIterable,
   reduce,
   map,
