@@ -370,6 +370,8 @@ list = map(_parseJson)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+## [3.0.0](https://github.com/warang580/datamix/compare/2.1.0...3.0.0) (2020-10-26)
+
 - Breaking: `size(undefined|null) // => undefined`
 - Breaking: `isIterable(undefined|null) // => false`
 - Feature: `paths(data, traverseArrays = false)`
