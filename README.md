@@ -282,8 +282,78 @@ let roleIds = map(users, user => getAll(user, 'roles.*.id'));
 
 # ROADMAP
 
-- _parseJson ?
-- mergeWith((v1, v2, k?) => {/* ... */}, ...data)
+- `values(data)`
+
+```js
+list = values({a: 1, b, 2, c: {x: 3, y: 4}}) // => [1, 2, {x: 3, y: 4}]
+```
+
+- `keys(data)`
+
+```js
+list = keys({a: 1, b, 2, c: {x: 3, y: 4}}) // ['a', 'b', 'c']
+```
+
+- `paths(data, traversingArrays = false)`
+
+```js
+let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
+
+paths(data)       // => ['a', 'b.x', 'b.y', 'c'],
+paths(data, true) // => ['a', 'b.x', 'b.y.0', 'b.y.1', 'c.0', 'c.1'],
+
+let list = [1, {a: 1, b: [3, 4]}, [5, 6]];
+
+paths(list)       // => ['0', '1.a', '1.b', '2']
+paths(list, true) // => ['0', '1.a', '1.b.0', '1.b.1', '2.0', '2.1']
+```
+
+- `entries(data, deep = false, traversingArrays = false)`
+
+```js
+let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
+
+entries(data)             // => [['a', 1], ['b', {x: 2, y: [3,4]}], ['c', ['foo', 'bar']]]
+entries(data, true)       // => [['a', 1], ['b.x', 2], ['b.y', [3, 4]], ['c', ['foo', 'bar']]]
+entries(data, true, true) // => [['a', 1], ['b.x', 2], ['b.y.0', 3], ['b.y.1', 4], ['c.0', 'foo'], ['c.1', 'bar']]
+```
+
+- `plain(data, traversingArrays = false)`
+
+```js
+let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
+
+plain(data)       // => {'a': 1, 'b.x': 2, 'b.y': [3, 4], 'c': ['foo', 'bar']}
+plain(data, true) // => {'a': 1, 'b.x': 2, 'b.y.0': 3, 'b.y.1': 4, 'c.0': 'foo', 'c.1': 'bar'}
+```
+
+- `setAll(list, wildcardPath, newValue)`
+
+```js
+setAll(list, "players.*.isDead", false)
+```
+
+- `setWith(list, pathValuePairs)`
+
+```js
+setWith({a: 1, b: 2, c: [3, 4]}, {'a': -1, 'c.0': 0}) // => {a: -1, b: 2, c: [0, 4]}
+```
+
+- `defaultsTo(data, defaultValue = undefined)`
+
+```js
+defaultsTo(undefined, []) // => []
+defaultsTo([1, 2, 3], []) // => [1, 2, 3]
+```
+
+- `_parseJson(defaultValue = {})`
+
+```js
+list = map(_parseJson)
+```
+
+- mergeWith(data, (v1, v2, k?) => {/* ... */}, ...datas)
+
 - transducers ? (t => t.map() t.filter() ?)
 
 # CHANGELOG
