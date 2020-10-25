@@ -366,6 +366,9 @@ list = map(_parseJson)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+- Feature: `values(data)`
+- Feature: `defaultsTo(data, defaultValue = [])`
+
 ## [2.1.0](https://github.com/warang580/datamix/compare/2.0.0...2.1.0) (2020-10-24)
 
 - Feature: `getAll(data, path)`
