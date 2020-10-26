@@ -358,6 +358,8 @@ list = map(_parseJson)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+## [3.1.0](https://github.com/warang580/datamix/compare/3.0.0...3.1.0) (2020-10-26)
+
 - Feature: `entries(data, deep = false, traverseArrays = false)`
 
 ## [3.0.0](https://github.com/warang580/datamix/compare/2.1.0...3.0.0) (2020-10-26)
