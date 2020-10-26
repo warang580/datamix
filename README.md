@@ -167,6 +167,16 @@ paths(list)       // => ['0', '1.a', '1.b', '2']
 paths(list, true) // => ['0', '1.a', '1.b.0', '1.b.1', '2.0', '2.1']
 ```
 
+### `entries(data, deep = false, traverseArrays = false)`
+
+```js
+let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
+
+entries(data)             // => [['a', 1], ['b', {x: 2, y: [3,4]}], ['c', ['foo', 'bar']]]
+entries(data, true)       // => [['a', 1], ['b.x', 2], ['b.y', [3, 4]], ['c', ['foo', 'bar']]]
+entries(data, true, true) // => [['a', 1], ['b.x', 2], ['b.y.0', 3], ['b.y.1', 4], ['c.0', 'foo'], ['c.1', 'bar']]
+```
+
 ### `isIterable(data)`
 
 Tells you if data can be iterated upon (`undefined` and `null` are handled like an empty iterable)
@@ -320,31 +330,9 @@ let roleIds = map(users, user => getAll(user, 'roles.*.id'));
 
 # ROADMAP
 
-- deferData(fn, ...args) [import {deferData: _}] ? or remove functional versions ?
-
-- Not sure if `isIterable(undefined) // => true` is a good idea ...
-  - even if I defaultsTo(data, []) it's not very clean
-
-- implement plain with paths, and entries with plain + reduce
-
-- `entries(data, deep = false, traverseArrays = false)`
-
-```js
-let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
-
-entries(data)             // => [['a', 1], ['b', {x: 2, y: [3,4]}], ['c', ['foo', 'bar']]]
-entries(data, true)       // => [['a', 1], ['b.x', 2], ['b.y', [3, 4]], ['c', ['foo', 'bar']]]
-entries(data, true, true) // => [['a', 1], ['b.x', 2], ['b.y.0', 3], ['b.y.1', 4], ['c.0', 'foo'], ['c.1', 'bar']]
-```
-
-- `plain(data, traverseArrays = false)`
-
-```js
-let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
-
-plain(data)       // => {'a': 1, 'b.x': 2, 'b.y': [3, 4], 'c': ['foo', 'bar']}
-plain(data, true) // => {'a': 1, 'b.x': 2, 'b.y.0': 3, 'b.y.1': 4, 'c.0': 'foo', 'c.1': 'bar'}
-```
+- `deferData(fn, ...args)`
+  - [import {deferData: _}] ?
+  - or simply remove functional versions ?
 
 - `setWith(list, pathValuePairs)`
 
@@ -369,6 +357,10 @@ list = map(_parseJson)
 (NOTE: update package.json version too)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
+
+## [3.1.0](https://github.com/warang580/datamix/compare/3.0.0...3.1.0) (2020-10-26)
+
+- Feature: `entries(data, deep = false, traverseArrays = false)`
 
 ## [3.0.0](https://github.com/warang580/datamix/compare/2.1.0...3.0.0) (2020-10-26)
 
