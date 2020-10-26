@@ -620,13 +620,13 @@ describe("paths", () => {
   it("returns paths of deep objects", function () {
     expect(datamix.paths({
       a: {x: 1, y: 2},
-      b: 'foo',
-      c: [{bar: 'baz'}],
+      b: ['foo', "bar"],
+      c: [{active: false}],
     })).toStrictEqual({
       'a.x': 1,
       'a.y': 2,
-      'b': 'foo',
-      'c': [{bar: 'baz'}],
+      'b': ['foo', "bar"],
+      'c': [{active: false}],
     });
   });
 
@@ -673,5 +673,41 @@ describe("paths", () => {
       'list.1.b': 2,
       'list.2.d': 4,
     });
+  });
+});
+
+describe("entries", () => {
+  it("returns an empty array with empty objects", function () {
+    expect(datamix.entries({})).toStrictEqual([]);
+  });
+
+  let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
+
+  it("returns shallow entries by default", function () {
+    expect(datamix.entries(data)).toStrictEqual([
+      ['a', 1],
+      ['b', {x: 2, y: [3, 4]}],
+      ['c', ['foo', 'bar']],
+    ]);
+  });
+
+  it("returns deep entries", function () {
+    expect(datamix.entries(data, true)).toStrictEqual([
+      ['a', 1],
+      ['b.x', 2],
+      ['b.y', [3, 4]],
+      ['c', ['foo', 'bar']],
+    ]);
+  });
+
+  it("returns deep entries by traversing arrays", function () {
+    expect(datamix.entries(data, true, true)).toStrictEqual([
+      ['a', 1],
+      ['b.x', 2],
+      ['b.y.0', 3],
+      ['b.y.1', 4],
+      ['c.0', 'foo'],
+      ['c.1', 'bar']
+    ]);
   });
 });

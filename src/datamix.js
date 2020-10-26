@@ -408,6 +408,18 @@ let paths = function (data, traverseArrays = false) {
   return pathsRec(data, []);
 }
 
+let entries = function (data, deep = false, traverseArrays = false) {
+  if (deep === false) {
+    return reduce(data, (entries, value, key) => {
+      entries.push([key, value]);
+
+      return entries;
+    }, []);
+  }
+
+  return Object.entries(paths(data, traverseArrays));
+}
+
 /**
 * Functional versions
 */
@@ -433,6 +445,7 @@ module.exports = {
   setAll,
   keys, values,
   paths,
+  entries,
   isIterable,
   reduce,
   map,
