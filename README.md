@@ -147,10 +147,10 @@ getAll({list: [
 } */
 ```
 
-### `setAll(list, wildcardPath, newValue)`
+### `setAll(data, wildcardPath, newValue)`
 
 ```js
-setAll(list, "players.*.isDead", false)
+setAll(game, "players.*.isDead", false)
 ```
 
 ### `paths(data, traverseArrays = false)`
