@@ -1,24 +1,24 @@
-const datamix = require("../src/datamix");
+const { plain } = require("../src/datamix");
 
 describe("plain", () => {
   it("returns empty objects as is", function () {
-    expect(datamix.plain({})).toStrictEqual({});
+    expect(plain({})).toStrictEqual({});
   });
 
   it("returns an entry for empty objects", function () {
-    expect(datamix.plain({o: {}})).toStrictEqual({o: {}});
+    expect(plain({o: {}})).toStrictEqual({o: {}});
   });
 
   it("returns an entry for empty arrays", function () {
-    expect(datamix.plain({l: []})).toStrictEqual({l: []});
+    expect(plain({l: []})).toStrictEqual({l: []});
   });
 
   it("returns shallow object as is", function () {
-    expect(datamix.plain({a: 1,  b: 2})).toStrictEqual({a: 1,  b: 2});
+    expect(plain({a: 1,  b: 2})).toStrictEqual({a: 1,  b: 2});
   });
 
   it("returns paths of deep objects", function () {
-    expect(datamix.plain({
+    expect(plain({
       a: {x: 1, y: 2},
       b: ['foo', "bar"],
       c: [{active: false}],
@@ -31,7 +31,7 @@ describe("plain", () => {
   });
 
   it("returns paths of deep objects by traversing arrays", function () {
-    expect(datamix.plain({
+    expect(plain({
       a: {x: 1, y: 2},
       b: 'foo',
       c: [{bar: 'baz'}],
@@ -46,7 +46,7 @@ describe("plain", () => {
   it("returns paths of arrays", function () {
     // NOTE: result === input in this case because there's
     // only one array that can't be traversed
-    expect(datamix.plain({
+    expect(plain({
       list: [
         {a: 1},
         {b: 2},
@@ -62,7 +62,7 @@ describe("plain", () => {
   });
 
   it("returns paths of arrays by traversing arrays", function () {
-    expect(datamix.plain({
+    expect(plain({
       list: [
         {a: 1},
         {b: 2},

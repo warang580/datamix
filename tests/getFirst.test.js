@@ -1,4 +1,4 @@
-const datamix = require("../src/datamix");
+const { getFirst } = require("../src/datamix");
 
 describe("getFirst", () => {
   it("gets the first defined value", function () {
@@ -9,13 +9,13 @@ describe("getFirst", () => {
     };
 
     expect(
-      datamix.getFirst(user, ['mobile_phone', 'home_phone', 'work_phone'], '?')
+      getFirst(user, ['mobile_phone', 'home_phone', 'work_phone'], '?')
     ).toStrictEqual("0123");
   });
 
   it("defaults to defaultValue if nothing is found", function () {
     expect(
-      datamix.getFirst({}, ['mobile_phone', 'home_phone', 'work_phone'], '?')
+      getFirst({}, ['mobile_phone', 'home_phone', 'work_phone'], '?')
     ).toStrictEqual("?");
   });
 });

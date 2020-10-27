@@ -1,15 +1,15 @@
-const datamix = require("../src/datamix");
+const { keys } = require("../src/datamix");
 
 describe("keys", () => {
   it("returns array indexes", function () {
-    expect(datamix.keys(['a', 'b'])).toStrictEqual([0, 1]);
+    expect(keys(['a', 'b'])).toStrictEqual([0, 1]);
   });
 
   it("returns object keys", function () {
-    expect(datamix.keys({a: 1, b: 2})).toStrictEqual(['a', 'b']);
+    expect(keys({a: 1, b: 2})).toStrictEqual(['a', 'b']);
   });
 
   it("returns empty array for nil keys", function () {
-    expect(datamix.keys(undefined)).toStrictEqual([]);
+    expect(keys(undefined)).toStrictEqual([]);
   });
 });

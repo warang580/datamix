@@ -1,12 +1,12 @@
-const datamix = require("../src/datamix");
-const sinon   = require("sinon");
+const { each } = require("../src/datamix");
+const sinon    = require("sinon");
 
 describe("each", () => {
   it("behaves like Array.forEach on arrays", function () {
     let callback = sinon.fake();
     let array    = ["a", "b"];
 
-    datamix.each(array, callback);
+    each(array, callback);
 
     expect(callback.calledWith("a", 0, array)).toBe(true);
     expect(callback.calledWith("b", 1, array)).toBe(true);
@@ -16,7 +16,7 @@ describe("each", () => {
     let callback = sinon.fake();
     let object   = {a: 1, b: 2};
 
-    datamix.each(object, callback);
+    each(object, callback);
 
     expect(callback.calledWith(1, "a", object)).toBe(true);
     expect(callback.calledWith(2, "b", object)).toBe(true);
@@ -26,8 +26,8 @@ describe("each", () => {
     let callback = sinon.fake();
     let object   = {a: 1, b: 2};
 
-    datamix.each(null,      callback);
-    datamix.each(undefined, callback);
+    each(null,      callback);
+    each(undefined, callback);
 
     expect(callback.called).toBe(false);
   });

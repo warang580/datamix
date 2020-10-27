@@ -1,15 +1,15 @@
-const datamix = require("../src/datamix");
+const { getAll } = require("../src/datamix");
 
 describe("getAll", () => {
   it("gets an empty array by default", function () {
     expect(
-      datamix.getAll(undefined, "a.*.b")
+      getAll(undefined, "a.*.b")
     ).toStrictEqual([]);
   });
 
   it("creates an array of all values found at path with wildcard", function () {
     expect(
-      datamix.getAll({list: [
+      getAll({list: [
         {a: 1}, {a: 2}, {b: 3}, {a: 4},
       ]}, "list.*.a")
     ).toStrictEqual([1, 2, 4]);
@@ -17,7 +17,7 @@ describe("getAll", () => {
 
   it("handles objects too", function () {
     expect(
-      datamix.getAll({dict: {
+      getAll({dict: {
         a: {id: 1},
         b: {id: 2},
         c: {id: 3},
@@ -28,7 +28,7 @@ describe("getAll", () => {
 
   it("handles multiple wildcards", function () {
     expect(
-      datamix.getAll([
+      getAll([
         {name: "Jane", roles: [{name: 'admin'}, {name: 'supervisor'}]},
         {name: "John", roles: [{name: 'supervisor'}]},
         {name: "Fred", roles: [{name: 'user'}]},
@@ -38,7 +38,7 @@ describe("getAll", () => {
 
   it('merges array together', function () {
     expect(
-      datamix.getAll({list: [
+      getAll({list: [
         {a: [1, 2]}, {a: [3, 4, 5]}, {z: [6]}, {a: [7, 8]},
       ]}, 'list.*.a.*')
     ).toStrictEqual([1, 2, 3, 4, 5, 7, 8]);
@@ -46,7 +46,7 @@ describe("getAll", () => {
 
   it("can tell what path it took to find value", function () {
     expect(
-      datamix.getAll({list: [
+      getAll({list: [
         {a: 1}, {a: 2}, {b: 3}, {a: 4},
       ]}, "list.*.a", true)
     ).toStrictEqual({
@@ -58,7 +58,7 @@ describe("getAll", () => {
 
   it('can find complex paths', function () {
     expect(
-      datamix.getAll({list: [
+      getAll({list: [
         {a: [1, 2]}, {a: [3, 4, 5]}, {z: [6]}, {a: [7, 8]},
       ]}, 'list.*.a.*', true)
     ).toStrictEqual({

@@ -1,9 +1,9 @@
-const datamix = require("../src/datamix");
+const { copy } = require("../src/datamix");
 
 describe("copy", () => {
   it("copies arrays", function () {
     let oldArray = [1, 2, 3];
-    let newArray = datamix.copy(oldArray);
+    let newArray = copy(oldArray);
 
     newArray.push(4);
 
@@ -13,7 +13,7 @@ describe("copy", () => {
 
   it("copies objects", function () {
     let oldObject = {a: 1, b: 2, c: 3};
-    let newObject = datamix.copy(oldObject);
+    let newObject = copy(oldObject);
 
     newObject['d'] = 4;
 
@@ -25,7 +25,7 @@ describe("copy", () => {
     let values = [42, "hello", null, undefined];
 
     values.forEach(value => {
-      expect(datamix.copy(value)).toStrictEqual(value);
+      expect(copy(value)).toStrictEqual(value);
     });
   });
 });

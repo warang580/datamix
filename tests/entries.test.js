@@ -1,14 +1,14 @@
-const datamix = require("../src/datamix");
+const { entries } = require("../src/datamix");
 
 describe("entries", () => {
   it("returns an empty array with empty objects", function () {
-    expect(datamix.entries({})).toStrictEqual([]);
+    expect(entries({})).toStrictEqual([]);
   });
 
   let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
 
   it("returns shallow entries by default", function () {
-    expect(datamix.entries(data)).toStrictEqual([
+    expect(entries(data)).toStrictEqual([
       ['a', 1],
       ['b', {x: 2, y: [3, 4]}],
       ['c', ['foo', 'bar']],
@@ -16,7 +16,7 @@ describe("entries", () => {
   });
 
   it("returns deep entries", function () {
-    expect(datamix.entries(data, true)).toStrictEqual([
+    expect(entries(data, true)).toStrictEqual([
       ['a', 1],
       ['b.x', 2],
       ['b.y', [3, 4]],
@@ -25,7 +25,7 @@ describe("entries", () => {
   });
 
   it("returns deep entries by traversing arrays", function () {
-    expect(datamix.entries(data, true, true)).toStrictEqual([
+    expect(entries(data, true, true)).toStrictEqual([
       ['a', 1],
       ['b.x', 2],
       ['b.y.0', 3],

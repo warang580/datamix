@@ -1,24 +1,24 @@
-const datamix = require("../src/datamix");
+const { paths } = require("../src/datamix");
 
 describe("paths", () => {
   it("returns empty objects as an empty array", function () {
-    expect(datamix.paths({})).toStrictEqual([]);
+    expect(paths({})).toStrictEqual([]);
   });
 
   it("returns an entry for empty objects", function () {
-    expect(datamix.paths({o: {}})).toStrictEqual(['o']);
+    expect(paths({o: {}})).toStrictEqual(['o']);
   });
 
   it("returns an entry for empty arrays", function () {
-    expect(datamix.paths({l: []})).toStrictEqual(['l']);
+    expect(paths({l: []})).toStrictEqual(['l']);
   });
 
   it("returns shallow object as is", function () {
-    expect(datamix.paths({a: 1,  b: 2})).toStrictEqual(['a', 'b']);
+    expect(paths({a: 1,  b: 2})).toStrictEqual(['a', 'b']);
   });
 
   it("returns paths of deep objects", function () {
-    expect(datamix.paths({
+    expect(paths({
       a: {x: 1, y: 2},
       b: ['foo', "bar"],
       c: [{active: false}],
@@ -26,7 +26,7 @@ describe("paths", () => {
   });
 
   it("returns paths of deep objects by traversing arrays", function () {
-    expect(datamix.paths({
+    expect(paths({
       a: {x: 1, y: 2},
       b: 'foo',
       c: [{bar: 'baz'}],
@@ -34,7 +34,7 @@ describe("paths", () => {
   });
 
   it("returns paths of arrays", function () {
-    expect(datamix.paths({
+    expect(paths({
       list: [
         {a: 1},
         {b: 2},
@@ -44,7 +44,7 @@ describe("paths", () => {
   });
 
   it("returns paths of arrays by traversing arrays", function () {
-    expect(datamix.paths({
+    expect(paths({
       list: [
         {a: 1},
         {b: 2},
