@@ -2,6 +2,7 @@
 
 Manipulate data of different types with the same consistent API
 (ie. objects and array are both key-value pairs)
+Inspired by Clojure and the talk "Running with scissors".
 
 **No dependencies included**
 
