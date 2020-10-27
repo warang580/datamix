@@ -299,52 +299,16 @@ parseJson('{invalid json}') // => {}
 parseJson('{invalid json}', undefined) // => undefined
 ```
 
-### `_get(path, defaultValue = undefined)`
+### `deferData(fn, ...args)`
 
-Functional version of get.
+Transform any function of this library into a function that just takes data as input. Useful for map/filter/reduce/etc.
 
 ```js
-let names = map(users, _get('name', 'unknown'));
+import { deferData:_, get } from '@warang580/datamix';
+
+let names = map(users, _(get, 'name', 'unknown'));
 // is equivalent to
 let names = map(users, user => get(user, 'name', 'unknown'));
-```
-
-### `_set(path, newValue)`
-
-Functional version of set.
-
-```js
-let names = map(users, _set('connections', c => c + 1));
-// is equivalent to
-let names = map(users, user => set(user, 'connections', c => c + 1));
-```
-
-### `_only(paths)`
-
-```js
-let u = map(users, _only(['name', 'email']));
-// is equivalent to
-let u = map(users, user => only(user, ['name', 'email']));
-```
-
-### `_getFirst(paths)`
-
-Functional version of getFirst.
-
-```js
-let email = map(users, _getFirst(['email', 'login.email', 'contact.email']));
-// is equivalent to
-let email = map(users, user => getFirst(user, ['email', 'login.email', 'contact.email']));
-```
-
-### `_getAll(paths)`
-
-Functional version of getAll.
-
-```js
-let roleIds = map(users, _getAll('roles.*.id'));
-// is equivalent to
-let roleIds = map(users, user => getAll(user, 'roles.*.id'));
 ```
 
 # [CHANGELOG](/CHANGELOG.md)

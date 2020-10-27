@@ -4,6 +4,8 @@
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+- Breaking: removing functional functions like `_get`, `_set`, etc.
+- Feature: `deferData(fn, ...args)` to transform any function in a functional one
 - Improved documentation
 
 ## [4.0.0](https://github.com/warang580/datamix/compare/3.1.0...4.0.0) (2020-10-27)
