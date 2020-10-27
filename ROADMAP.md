@@ -1,7 +1,6 @@
 # ROADMAP
 
 - split source if multiple files (src + tests)
-- split documentation in multiple files
 
 - `deferData(fn, ...args)`
   - [import {deferData: _}] ?
@@ -15,10 +14,14 @@ setWith({a: 1, b: 2, c: [3, 4]}, {'a': -1, 'c.0': 0}) // => {a: -1, b: 2, c: [0,
 setWith({a: 1, b: 2, c: [3, 4]}, [['a', -1], ['c.0', 0]]) // => {a: -1, b: 2, c: [0, 4]}
 ```
 
-- `_parseJson(defaultValue = {})`
+- rename `defaultsTo` to `coerce` or `or` ?
+
+- `eachAsync` that doesn't care about order ? like Promise.all()
+
+- `tap(data)` to allow returning "side-effects" that don't return "self"
 
 ```js
-list = map(_parseJson)
+return tap(users, (users) => users.push(user));
 ```
 
 - mergeWith(data, (v1, v2, k?) => {/* ... */}, ...datas)
