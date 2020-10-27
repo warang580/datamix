@@ -339,6 +339,9 @@ let roleIds = map(users, user => getAll(user, 'roles.*.id'));
 
 # ROADMAP
 
+- split ROADMAP and CHANGELOG in separate files
+- same for documentation ?
+
 - `deferData(fn, ...args)`
   - [import {deferData: _}] ?
   - or simply remove functional versions ?
@@ -367,11 +370,14 @@ list = map(_parseJson)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
-## [3.1.0](https://github.com/warang580/datamix/compare/3.0.0...3.1.0) (2020-10-26)
+## [4.0.0](https://github.com/warang580/datamix/compare/3.1.0...4.0.0) (2020-10-27)
 
 - Breaking: renamed actual `paths` to `plain`
 - Feature: `paths(data, traverseArrays = false)` => [path, ...]
 - Feature: `plain(data, traverseArrays = false)` => {path: value, ...}
+
+## [3.1.0](https://github.com/warang580/datamix/compare/3.0.0...3.1.0) (2020-10-26)
+
 - Feature: `entries(data, deep = false, traverseArrays = false)` => [[key, value], ...]
 
 ## [3.0.0](https://github.com/warang580/datamix/compare/2.1.0...3.0.0) (2020-10-26)
