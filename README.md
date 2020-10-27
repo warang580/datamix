@@ -98,7 +98,7 @@ only(
 
 ### `keys(data)`
 
-Get all data keys (like Object.keys() but for arrays too).
+Get all data keys, like Object.keys().
 
 ```js
 keys({a: 1, b, 2, c: {x: 3, y: 4}}) // ['a', 'b', 'c']
@@ -106,7 +106,7 @@ keys({a: 1, b, 2, c: {x: 3, y: 4}}) // ['a', 'b', 'c']
 
 ### `values(data)`
 
-Get all data keys (like Object.values() but for arrays too).
+Get all data keys, like Object.values().
 
 ```js
 values({a: 1, b, 2, c: {x: 3, y: 4}}) // => [1, 2, {x: 3, y: 4}]
