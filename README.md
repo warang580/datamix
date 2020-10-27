@@ -179,7 +179,7 @@ paths(list, true) // => ['0', '1.a', '1.b.0', '1.b.1', '2.0', '2.1']
 
 ### `entries(data, deep = false, traverseArrays = false)`
 
-Get an array of all [path, value] in data.
+Get an array of all [path, value] in data, like `Object.entries()`.
 
 ```js
 let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
