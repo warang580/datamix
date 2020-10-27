@@ -1,7 +1,7 @@
 # ROADMAP
 
-- split ROADMAP and CHANGELOG in separate files
-- same for documentation ?
+- split source if multiple files (src + tests)
+- split documentation in multiple files
 
 - `deferData(fn, ...args)`
   - [import {deferData: _}] ?
