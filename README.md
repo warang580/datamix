@@ -112,6 +112,15 @@ Get all data keys, like Object.values().
 values({a: 1, b, 2, c: {x: 3, y: 4}}) // => [1, 2, {x: 3, y: 4}]
 ```
 
+### `size(data)`
+
+Get data size, like Array.length.
+
+```js
+size({a: 1, b, 2, c: {x: 3, y: 4}}) // => 3
+size(undefined) // => undefined
+```
+
 ### `getFirst(data, paths, defaultValue = undefined)`
 
 Get the first non-nil value using a list of possible paths in a value.
