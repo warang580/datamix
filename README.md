@@ -155,6 +155,8 @@ setAll(list, "players.*.isDead", false)
 
 ### `paths(data, traverseArrays = false)`
 
+Warning: paths() actually returns an object of path->value for now, I need to change the API so it's called "plain" and paths() can stay the same
+
 ```js
 let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
 
@@ -179,15 +181,15 @@ entries(data, true, true) // => [['a', 1], ['b.x', 2], ['b.y.0', 3], ['b.y.1', 4
 
 ### `isIterable(data)`
 
-Tells you if data can be iterated upon (`undefined` and `null` are handled like an empty iterable)
+Tells you if data can be iterated upon
 
 ```js
 import { isIterable } from "@warang580/datamix";
 
 isIterable([/* ... */]) // => true
 isIterable({/* ... */}) // => true
-isIterable(undefined)   // => true
-isIterable(null)        // => true
+isIterable(undefined)   // => false
+isIterable(null)        // => false
 isIterable("hello")     // => false
 isIterable(42)          // => false
 ```
