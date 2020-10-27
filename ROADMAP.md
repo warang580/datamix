@@ -1,7 +1,5 @@
 # ROADMAP
 
-- split source if multiple files (src + tests)
-
 - `deferData(fn, ...args)`
   - [import {deferData: _}] ?
   - or simply remove functional versions ?
