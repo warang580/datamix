@@ -177,17 +177,26 @@ entries(data, true)       // => [['a', 1], ['b.x', 2], ['b.y', [3, 4]], ['c', ['
 entries(data, true, true) // => [['a', 1], ['b.x', 2], ['b.y.0', 3], ['b.y.1', 4], ['c.0', 'foo'], ['c.1', 'bar']]
 ```
 
+### `plain(data, traverseArrays = false)`
+
+```js
+let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
+
+paths(data)       // => {'a': 1, 'b.x': 2, 'b.y': [3, 4], 'c': ['foo', 'bar']}
+paths(data, true) // => {'a': 1, 'b.x': 2, 'b.y.0': 3, 'b.y.1': 4, 'c.0': 'foo', 'c.1': 'bar'}
+```
+
 ### `isIterable(data)`
 
-Tells you if data can be iterated upon (`undefined` and `null` are handled like an empty iterable)
+Tells you if data can be iterated upon
 
 ```js
 import { isIterable } from "@warang580/datamix";
 
 isIterable([/* ... */]) // => true
 isIterable({/* ... */}) // => true
-isIterable(undefined)   // => true
-isIterable(null)        // => true
+isIterable(undefined)   // => false
+isIterable(null)        // => false
 isIterable("hello")     // => false
 isIterable(42)          // => false
 ```
@@ -330,6 +339,9 @@ let roleIds = map(users, user => getAll(user, 'roles.*.id'));
 
 # ROADMAP
 
+- split ROADMAP and CHANGELOG in separate files
+- same for documentation ?
+
 - `deferData(fn, ...args)`
   - [import {deferData: _}] ?
   - or simply remove functional versions ?
@@ -358,9 +370,15 @@ list = map(_parseJson)
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+## [4.0.0](https://github.com/warang580/datamix/compare/3.1.0...4.0.0) (2020-10-27)
+
+- Breaking: renamed actual `paths` to `plain`
+- Feature: `paths(data, traverseArrays = false)` => [path, ...]
+- Feature: `plain(data, traverseArrays = false)` => {path: value, ...}
+
 ## [3.1.0](https://github.com/warang580/datamix/compare/3.0.0...3.1.0) (2020-10-26)
 
-- Feature: `entries(data, deep = false, traverseArrays = false)`
+- Feature: `entries(data, deep = false, traverseArrays = false)` => [[key, value], ...]
 
 ## [3.0.0](https://github.com/warang580/datamix/compare/2.1.0...3.0.0) (2020-10-26)
 

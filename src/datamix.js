@@ -373,9 +373,9 @@ let values = function (data) {
   }, []);
 }
 
-let paths = function (data, traverseArrays = false) {
+let plain = function (data, traverseArrays = false) {
   // Make a recursive function to iterate over all branches
-  let pathsRec = function (data, currentPath) {
+  let plainRec = function (data, currentPath) {
     // Iterate on all current branches
     return reduce(data, (paths, value, key) => {
       let subpath = currentPath.concat([key]);
@@ -392,7 +392,7 @@ let paths = function (data, traverseArrays = false) {
         }
         // Recursively fetch sub branches
         else {
-          paths = Object.assign(paths, pathsRec(value, subpath));
+          paths = Object.assign(paths, plainRec(value, subpath));
         }
       }
       // Assign current {path: value} pair
@@ -405,7 +405,11 @@ let paths = function (data, traverseArrays = false) {
   }
 
   // Start recursivity with an empty currentPath
-  return pathsRec(data, []);
+  return plainRec(data, []);
+}
+
+let paths = function (data, traverseArrays = false) {
+  return Object.keys(plain(data, traverseArrays));
 }
 
 let entries = function (data, deep = false, traverseArrays = false) {
@@ -417,7 +421,7 @@ let entries = function (data, deep = false, traverseArrays = false) {
     }, []);
   }
 
-  return Object.entries(paths(data, traverseArrays));
+  return Object.entries(plain(data, traverseArrays));
 }
 
 /**
@@ -444,6 +448,7 @@ module.exports = {
   set, _set,
   setAll,
   keys, values,
+  plain,
   paths,
   entries,
   isIterable,
