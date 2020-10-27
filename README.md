@@ -132,14 +132,14 @@ Aggregate all values that match a specific paths with wildcards.
 ```js
 let users = [{
   name: "Jane",
-  contacts: [{email: "paul@mail.com"}, {email: "fred@mail.com"}],
+  contacts: [{email: "paul@mail.com"}],
 }, {
   name: "Fred",
   contacts: [{email: "john@mail.com"}, {email: "judy@mail.com"}],
 }];
 
 // Only get values
-getAll(users, "*.contacts.*.email") // => ["jane@mail.com", "fred@mail.com", "john@mail.com", "judy@mail.com"]
+getAll(users, "*.contacts.*.email") // => ["paul@mail.com", "john@mail.com", "judy@mail.com"]
 
 // Get paths and values (can be useful to "set" or "setWith" later)
 getAll({list: [
