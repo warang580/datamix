@@ -259,7 +259,7 @@ each(dictionary, word => console.log("word", word));
 Iterate on key-value pairs to do asynchronous side-effects, but synchronously and in order (avoids boilerplate).
 
 ```js
-eachSync(users, saveUser);
+await eachSync(users, saveUserPromise);
 
 // All promises are done here
 ```
@@ -269,8 +269,6 @@ eachSync(users, saveUser);
 Returns a copy of data to ensure that we don't change data by side-effects.
 
 ```js
-import { copy } from "@warang580/datamix";
-
 let numbers  = [1, 2, 3, 4];
 let previous = copy(numbers);
 
