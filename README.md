@@ -2,8 +2,11 @@
 
 Manipulate data of different types with the same consistent API
 (ie. objects and array are both key-value pairs)
+Inspired by Clojure and the talk "Running with scissors".
 
 **No dependencies included**
+
+# Getting Started
 
 ## Installation
 
@@ -11,44 +14,42 @@ NPM  : `npm install @warang580/datamix`
 
 Yarn : `yarn add @warang580/datamix`
 
-## Usage
+## Import
 
 ```js
 // ES6
-import Data from "@warang580/datamix";
+import mix from "@warang580/datamix";
+// NodeJS
+const mix = require("@warang580/datamix");
 ```
+
+You can also import specific functions with object notation, like :
 
 ```js
-// NodeJS
-let Data = require("@warang580/datamix");
+import { get, set } from "@warang580/datamix";
 ```
 
-## Examples
+## API
+
+This section contains all functions with a quick description and usage example.
 
 Reminder: all functions work on arrays AND objects.
 
-### `defaultsTo(data, defaultValue = [])`
-
-```js
-let config = defaultsTo(getConfig(/* ... */), {})
-```
-
 ### `get(data, path, notFoundValue = undefined)`
 
+Get a value in a deep data tree of values.
+
 ```js
-import { get } from "@warang580/datamix";
-
-let response = request(/* ... */);
-
 let userId   = get(response, 'data.user.id'); // => <someId> or `undefined`
-let userName = get(response, ['users', user.id, 'name'], "unknown"); // => <name> or "unknown"
+// OR (array notation)
+let userName = get(users, [userId, 'name'], "unknown"); // => <name> or "unknown"
 ```
 
 ### `set(data, path, newValue)`
 
-```js
-import { set } from "@warang580/datamix";
+Set a value (without side-effects) in a deep data tree of values.
 
+```js
 let user = {
   firstname: "John",
   lastname:  "Doe",
@@ -58,9 +59,7 @@ let user = {
   }
 };
 
-// Updating without side-effects
 user = set(user, 'age', 50);
-// newValue can be a function with current value as argument
 user = set(user, 'auth.connections', c => c + 1);
 
 user /* => {
@@ -74,13 +73,19 @@ user /* => {
 } */
 ```
 
-### `only(data, paths, withMissing = true)`
+### `defaultsTo(data, defaultValue = [])`
 
-Paths should be `{oldpath: newpath, ...}`
+Coerce a nil value (`undefined` or `null`) into another. Used to ensure that a value is always an array or object depending on needs.
 
 ```js
-import { only } from "@warang580/datamix";
+let config = defaultsTo(getConfig(/* ... */), {})
+```
 
+### `only(data, paths, withMissing = true)`
+
+Get a subset of data using paths. Paths can be arrays ['path', ...] or objects like `{newpath: oldpath, ...}`.
+
+```js
 only({x:1, y:2}, ['x']) // =>  {x: 1}
 only({a:0}, {foo: 'a'}) // =>  {foo: 0}
 only({}, ['a'])         // =>  {a: undefined}
@@ -94,21 +99,34 @@ only(
 
 ### `keys(data)`
 
+Get all data keys, like Object.keys().
+
 ```js
 keys({a: 1, b, 2, c: {x: 3, y: 4}}) // ['a', 'b', 'c']
 ```
 
 ### `values(data)`
 
+Get all data keys, like Object.values().
+
 ```js
 values({a: 1, b, 2, c: {x: 3, y: 4}}) // => [1, 2, {x: 3, y: 4}]
 ```
 
-### `getFirst(data, paths, defaultValue = undefined)`
+### `size(data)`
+
+Get data size, like Array.length.
 
 ```js
-import { getFirst } from "@warang580/datamix";
+size({a: 1, b, 2, c: {x: 3, y: 4}}) // => 3
+size(undefined) // => undefined
+```
 
+### `getFirst(data, paths, defaultValue = undefined)`
+
+Get the first non-nil value using a list of possible paths in a value.
+
+```js
 let user = {
   work_phone: "0456",
   home_phone: "0123",
@@ -119,41 +137,43 @@ let number = getFirst(user, ['mobile_phone', 'home_phone', 'work_phone'], "?"); 
 
 ### `getAll(data, wildcardPath, withPaths = false)`
 
-```js
-import { getAll } from "@warang580/datamix";
+Aggregate all values that match a specific paths with wildcards.
 
+```js
 let users = [{
   name: "Jane",
-  contacts: [{email: "paul@mail.com"}, {email: "fred@mail.com"}],
+  contacts: [{email: "paul@mail.com"}],
 }, {
   name: "Fred",
   contacts: [{email: "john@mail.com"}, {email: "judy@mail.com"}],
 }];
 
 // Only get values
-getAll(users, "*.contacts.*.email") // => ["jane@mail.com", "fred@mail.com", "john@mail.com", "judy@mail.com"]
+getAll(users, "*.contacts.*.email") // => ["paul@mail.com", "john@mail.com", "judy@mail.com"]
 
-// Get paths and values (can be useful to "set" later)
+// Get paths and values (can be useful to "set" or "setWith" later)
 getAll({list: [
-  {a: [1, 2]}, {a: [3, 4, 5]}, {z: [6]}, {a: [7, 8]},
+  {a: [1, 2]}, {z: [3]}, {a: [4, 5]},
 ]}, 'list.*.a.*', true) /* => {
   'list.0.a.0': 1,
   'list.0.a.1': 2,
-  'list.1.a.0': 3,
-  'list.1.a.1': 4,
-  'list.1.a.2': 5,
-  'list.3.a.0': 7,
-  'list.3.a.1': 8,
+  'list.3.a.0': 4,
+  'list.3.a.1': 5,
 } */
 ```
 
-### `setAll(list, wildcardPath, newValue)`
+### `setAll(data, wildcardPath, newValue)`
+
+Set all values that matches path with a new value.
 
 ```js
-setAll(list, "players.*.isDead", false)
+setAll(game, "players.*.isDead", false)
+setAll(game, "players.*.score",  s => (s || 0) + 1)
 ```
 
 ### `paths(data, traverseArrays = false)`
+
+Get an array of all available paths in data.
 
 ```js
 let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
@@ -169,6 +189,8 @@ paths(list, true) // => ['0', '1.a', '1.b.0', '1.b.1', '2.0', '2.1']
 
 ### `entries(data, deep = false, traverseArrays = false)`
 
+Get an array of all [path, value] in data, like `Object.entries()`.
+
 ```js
 let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
 
@@ -179,6 +201,8 @@ entries(data, true, true) // => [['a', 1], ['b.x', 2], ['b.y.0', 3], ['b.y.1', 4
 
 ### `plain(data, traverseArrays = false)`
 
+Get an object of all {path: value} in data.
+
 ```js
 let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
 
@@ -188,11 +212,9 @@ paths(data, true) // => {'a': 1, 'b.x': 2, 'b.y.0': 3, 'b.y.1': 4, 'c.0': 'foo',
 
 ### `isIterable(data)`
 
-Tells you if data can be iterated upon
+Returns if data can be iterated upon using functions of this library.
 
 ```js
-import { isIterable } from "@warang580/datamix";
-
 isIterable([/* ... */]) // => true
 isIterable({/* ... */}) // => true
 isIterable(undefined)   // => false
@@ -203,27 +225,25 @@ isIterable(42)          // => false
 
 ### `map(data, (v, k, data) => {...})`
 
-```js
-import { map, get } from "@warang580/datamix";
+Update value on key-value pairs (reminder: all functions work on objects too).
 
-let users = [/* ... */];
+```js
 let names = map(users, user => get(user, 'name', 'unknown'));
 ```
 
 ### `filter(data, (v, k, data) => {...})`
 
-```js
-import { filter, get } from "@warang580/datamix";
+Recreate a new data based on key-value filter.
 
-let users  = [/* ... */];
+```js
 let admins = filter(users, user => get(user, 'is_admin', false));
 ```
 
 ### `reduce(data, (acc, v, k, data) => {...})`
 
-```js
-import { get, reduce } from "@warang580/datamix";
+Reduce data based on key-value pairs.
 
+```js
 let shoppingList = {
   "egg":       {count: 6, unitPrice: 1},
   "chocolate": {count: 2, unitPrice: 10},
@@ -238,35 +258,27 @@ let total = reduce(
 
 ### `each(data, (v, k, data) => {...})`
 
+Iterate on key-value pairs to do side-effects.
+
 ```js
-import { each } from "@warang580/datamix";
-
-let names = {"Jade", "John", "Fred"};
-
-each(names, name => console.log("Hello", name));
+each(dictionary, word => console.log("word", word));
 ```
 
 ### `eachSync(data, async (v, k, data) => {...})`
 
+Iterate on key-value pairs to do asynchronous side-effects, but synchronously and in order (avoids boilerplate).
+
 ```js
-import { eachSync } from "@warang580/datamix";
+await eachSync(users, saveUserPromise);
 
-let users = [/* ... */];
-
-eachSync(users, async user => {
-  await saveUser(user);
-});
-
-// Everything is done here
+// All promises are done here
 ```
 
 ### `copy(data)`
 
-Ensuring that we don't change data by side-effects
+Returns a copy of data to ensure that we don't change data by side-effects.
 
 ```js
-import { copy } from "@warang580/datamix";
-
 let numbers  = [1, 2, 3, 4];
 let previous = copy(numbers);
 
@@ -279,143 +291,26 @@ previous // => [1, 2, 3, 4]
 
 ### `parseJson(raw, defaultValue = {})`
 
+Parse json without failing with invalid raw json.
+
 ```js
-import { parseJson } from "@warang580/datamix";
-
-let res = '{"foo":"bar"}';
-
-parseJson(res) // => {foo: "bar"}
+parseJson('{"foo":"bar"}')  // => {foo: "bar"}
+parseJson('{invalid json}') // => {}
+parseJson('{invalid json}', undefined) // => undefined
 ```
 
-### `_get(path, defaultValue = undefined)` (functional version of get)
+### `deferData(fn, ...args)`
+
+Transform any function of this library into a function that just takes data as input. Useful for map/filter/reduce/etc.
 
 ```js
-import { map, _get, get } from "@warang580/datamix";
+import { deferData:_, get } from '@warang580/datamix';
 
-let names = map(users, _get('name', 'unknown'));
+let names = map(users, _(get, 'name', 'unknown'));
 // is equivalent to
 let names = map(users, user => get(user, 'name', 'unknown'));
 ```
 
-### `_set(path, newValue)` (functional version of set)
+# [CHANGELOG](/CHANGELOG.md)
 
-```js
-import { map, set, _set } from "@warang580/datamix";
-
-let names = map(users, _set('connections', c => c + 1));
-// is equivalent to
-let names = map(users, user => set(user, 'connections', c => c + 1));
-```
-
-### `_only(paths)` (functional version of only)
-
-```js
-import { map, only, _only } from "@warang580/datamix";
-
-let u = map(users, _only(['name', 'email']));
-// is equivalent to
-let u = map(users, user => only(user, ['name', 'email']));
-```
-
-### `_getFirst(paths)` (functional version of getFirst)
-
-```js
-import { map, getFirst, _getFirst } from "@warang580/datamix";
-
-let email = map(users, _getFirst(['email', 'login.email', 'contact.email']));
-// is equivalent to
-let email = map(users, user => getFirst(user, ['email', 'login.email', 'contact.email']));
-```
-
-### `_getAll(paths)` (functional version of getAll)
-
-```js
-import { map, getAll, _getAll } from "@warang580/datamix";
-
-let roleIds = map(users, _getAll('roles.*.id'));
-// is equivalent to
-let roleIds = map(users, user => getAll(user, 'roles.*.id'));
-```
-
-# ROADMAP
-
-- split ROADMAP and CHANGELOG in separate files
-- same for documentation ?
-
-- `deferData(fn, ...args)`
-  - [import {deferData: _}] ?
-  - or simply remove functional versions ?
-
-- `setWith(list, pathValuePairs)`
-
-```js
-setWith({a: 1, b: 2, c: [3, 4]}, {'a': -1, 'c.0': 0}) // => {a: -1, b: 2, c: [0, 4]}
-// is equivalent to
-setWith({a: 1, b: 2, c: [3, 4]}, [['a', -1], ['c.0', 0]]) // => {a: -1, b: 2, c: [0, 4]}
-```
-
-- `_parseJson(defaultValue = {})`
-
-```js
-list = map(_parseJson)
-```
-
-- mergeWith(data, (v1, v2, k?) => {/* ... */}, ...datas)
-
-- transducers ? (t => t.map() t.filter() ?)
-
-# CHANGELOG
-
-(NOTE: update package.json version too)
-
-## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
-
-## [4.0.0](https://github.com/warang580/datamix/compare/3.1.0...4.0.0) (2020-10-27)
-
-- Breaking: renamed actual `paths` to `plain`
-- Feature: `paths(data, traverseArrays = false)` => [path, ...]
-- Feature: `plain(data, traverseArrays = false)` => {path: value, ...}
-
-## [3.1.0](https://github.com/warang580/datamix/compare/3.0.0...3.1.0) (2020-10-26)
-
-- Feature: `entries(data, deep = false, traverseArrays = false)` => [[key, value], ...]
-
-## [3.0.0](https://github.com/warang580/datamix/compare/2.1.0...3.0.0) (2020-10-26)
-
-- Breaking: `size(undefined|null) // => undefined`
-- Breaking: `isIterable(undefined|null) // => false`
-- Feature: `paths(data, traverseArrays = false)`
-- Feature: `setAll(data, wildcardPath, newValue)`
-- Feature: `keys(data)`
-- Feature: `values(data)`
-- Feature: `defaultsTo(data, defaultValue = [])`
-
-## [2.1.0](https://github.com/warang580/datamix/compare/2.0.0...2.1.0) (2020-10-24)
-
-- Feature: `getAll(data, path)`
-
-## [2.0.0](https://github.com/warang580/datamix/compare/1.2.0...2.0.0) (2020-10-24)
-
-- **Breaking**: renamed all functional versions with "_" prefix instead of "f" (eg. `fmap` => `_map`)
-- Feature: `getFirst(data, paths, defaultValue = undefined)`
-- Feature: `only(data, paths, withMissing = true)`
-- Feature: `isIterable(data)`
-- Feature: `parseJson(raw, defaultValue = {})`
-
-## [1.2.0](https://github.com/warang580/datamix/compare/1.1.0...1.2.0) (2020-10-24)
-
-- Feature: `fget` and `fset` are functional versions of get and set (for map/filter/reduce)
-- Bugfix: handle "empty" paths correctly ("", null, undefined)
-- Bugfix: you can get/set array by numerical indexes
-
-## [1.1.0](https://github.com/warang580/datamix/compare/1.0.1...1.1.0) (2020-10-24)
-
-- Feature: `size(data)` returns the number of elements in data
-
-## [1.0.1](https://github.com/warang580/datamix/compare/v1.0.0...1.0.1) (2020-10-24)
-
-- Bugfix: fixed set(null, ...) error
-
-## 1.0.0 (2020-10-18)
-
-Base version with `get`, `set`, `reduce`, `map`, `filter`, `each`, `eachSync`, `copy`
+# [ROADMAP](/ROADMAP.md)

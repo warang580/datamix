@@ -344,19 +344,6 @@ let setAll = function (data, path, newValue) {
   }, data);
 }
 
-/**
-* Make a functional version of an existing function
-* (not part of public API, just here to avoid duplications)
-*/
-let makeFunctional = function (fn) {
-  // eg. makeFunctional(get)('some.path', 'value') will return
-  // a fn that takes data as input and output the result of the full get
-  // which can be used in map, filter and reduce
-  return (...args) => (data) => {
-    return fn(data, ...args);
-  }
-}
-
 let defaultsTo = function (data, defaultValue = []) {
   return isNil(data) ? defaultValue : data;
 }
@@ -428,11 +415,17 @@ let entries = function (data, deep = false, traverseArrays = false) {
 * Functional versions
 */
 
-let _get      = makeFunctional(get);
-let _set      = makeFunctional(set);
-let _only     = makeFunctional(only);
-let _getFirst = makeFunctional(getFirst);
-let _getAll   = makeFunctional(getAll);
+/**
+* Make a functional version of an existing function
+*/
+let deferData = function (fn, ...args) {
+  // eg. deferData(get, 'some.path', 'value') will return
+  // a fn that takes data as input and output the result of the full get
+  // which can be used in map, filter and reduce
+  return (data) => {
+    return fn(data, ...args);
+  }
+}
 
 /**
  * Exporting functions
@@ -441,13 +434,14 @@ module.exports = {
   copy,
   size,
   defaultsTo,
-  get, _get,
-  getFirst, _getFirst,
-  getAll, _getAll,
-  only, _only,
-  set, _set,
+  get,
+  getFirst,
+  getAll,
+  only,
+  set,
   setAll,
-  keys, values,
+  keys,
+  values,
   plain,
   paths,
   entries,
@@ -458,4 +452,5 @@ module.exports = {
   each,
   eachSync,
   parseJson,
+  deferData,
 }
