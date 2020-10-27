@@ -82,7 +82,7 @@ let config = defaultsTo(getConfig(/* ... */), {})
 
 ### `only(data, paths, withMissing = true)`
 
-Get a subset of data using paths. Paths should be `{newpath: oldpath, ...}`.
+Get a subset of data using paths. Paths can be arrays ['path', ...] or objects like `{newpath: oldpath, ...}`.
 
 ```js
 only({x:1, y:2}, ['x']) // =>  {x: 1}
