@@ -155,8 +155,6 @@ setAll(list, "players.*.isDead", false)
 
 ### `paths(data, traverseArrays = false)`
 
-Warning: paths() actually returns an object of path->value for now, I need to change the API so it's called "plain" and paths() can stay the same
-
 ```js
 let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
 
@@ -177,6 +175,15 @@ let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
 entries(data)             // => [['a', 1], ['b', {x: 2, y: [3,4]}], ['c', ['foo', 'bar']]]
 entries(data, true)       // => [['a', 1], ['b.x', 2], ['b.y', [3, 4]], ['c', ['foo', 'bar']]]
 entries(data, true, true) // => [['a', 1], ['b.x', 2], ['b.y.0', 3], ['b.y.1', 4], ['c.0', 'foo'], ['c.1', 'bar']]
+```
+
+### `plain(data, traverseArrays = false)`
+
+```js
+let data = {a: 1, b: {x: 2, y: [3, 4]}, c: ['foo', 'bar']};
+
+paths(data)       // => {'a': 1, 'b.x': 2, 'b.y': [3, 4], 'c': ['foo', 'bar']}
+paths(data, true) // => {'a': 1, 'b.x': 2, 'b.y.0': 3, 'b.y.1': 4, 'c.0': 'foo', 'c.1': 'bar'}
 ```
 
 ### `isIterable(data)`
@@ -362,7 +369,10 @@ list = map(_parseJson)
 
 ## [3.1.0](https://github.com/warang580/datamix/compare/3.0.0...3.1.0) (2020-10-26)
 
-- Feature: `entries(data, deep = false, traverseArrays = false)`
+- Breaking: renamed actual `paths` to `plain`
+- Feature: `paths(data, traverseArrays = false)` => [path, ...]
+- Feature: `plain(data, traverseArrays = false)` => {path: value, ...}
+- Feature: `entries(data, deep = false, traverseArrays = false)` => [[key, value], ...]
 
 ## [3.0.0](https://github.com/warang580/datamix/compare/2.1.0...3.0.0) (2020-10-26)
 
