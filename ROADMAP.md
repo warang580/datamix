@@ -1,5 +1,7 @@
 # ROADMAP
 
+- `getAll(data, path, *withUndefined = false*, withPaths)` ?
+
 - `setWith(list, pathValuePairs)`
 
 ```js
