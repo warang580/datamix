@@ -1,7 +1,5 @@
 # ROADMAP
 
-- `getAll(data, path, *withUndefined = false*, withPaths)` ?
-
 - `setWith(list, pathValuePairs)`
 
 ```js
@@ -9,6 +7,8 @@ setWith({a: 1, b: 2, c: [3, 4]}, {'a': -1, 'c.0': 0}) // => {a: -1, b: 2, c: [0,
 // is equivalent to
 setWith({a: 1, b: 2, c: [3, 4]}, [['a', -1], ['c.0', 0]]) // => {a: -1, b: 2, c: [0, 4]}
 ```
+
+- "getWith()" == only() ?
 
 - rename `defaultsTo` to `coerce` or `or` ?
 
@@ -20,6 +20,8 @@ setWith({a: 1, b: 2, c: [3, 4]}, [['a', -1], ['c.0', 0]]) // => {a: -1, b: 2, c:
 return tap(users, (users) => users.push(user));
 ```
 
-- mergeWith(data, (v1, v2, k?) => {/* ... */}, ...datas)
+- `mergeWith(data, (v1, v2, k?) => {/* ... */}, defaultValue?, ...datas)`
+
+- `groupBy(data, path)` => {value: [values]}
 
 - transducers ? (t => t.map() t.filter() ?)
