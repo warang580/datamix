@@ -157,8 +157,8 @@ getAll({list: [
 ]}, 'list.*.a.*', true) /* => {
   'list.0.a.0': 1,
   'list.0.a.1': 2,
-  'list.3.a.0': 4,
-  'list.3.a.1': 5,
+  'list.2.a.0': 4,
+  'list.2.a.1': 5,
 } */
 ```
 
