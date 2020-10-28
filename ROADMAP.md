@@ -1,9 +1,5 @@
 # ROADMAP
 
-- `deferData(fn, ...args)`
-  - [import {deferData: _}] ?
-  - or simply remove functional versions ?
-
 - `setWith(list, pathValuePairs)`
 
 ```js
