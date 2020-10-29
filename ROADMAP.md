@@ -8,6 +8,27 @@ setWith({a: 1, b: 2, c: [3, 4]}, {'a': -1, 'c.0': 0}) // => {a: -1, b: 2, c: [0,
 setWith({a: 1, b: 2, c: [3, 4]}, [['a', -1], ['c.0', 0]]) // => {a: -1, b: 2, c: [0, 4]}
 ```
 
+- `groupBy(data, path)`
+
+```js
+groupBy([
+  {name: "John", admin: false},
+  {name: "Jane", admin: true},
+  {name: "Paul", admin: false},
+  {name: "Fred", admin: false}
+], 'admin') /* => {
+  false: [
+    {name: "John", admin: false},
+    {name: "Jane", admin: true},
+    {name: "Paul", admin: false},
+    {name: "Fred", admin: false}
+  ],
+  true: [
+    {name: Jane, admin: true}
+  ],
+} */
+```
+
 - "getWith()" == only() ?
 
 - rename `defaultsTo` to `coerce` or `or` ?
