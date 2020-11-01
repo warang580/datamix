@@ -2,7 +2,8 @@
 
 Manipulate data of different types with the same consistent API
 (ie. objects and array are both key-value pairs)
-Inspired by Clojure and the talk "Running with scissors".
+
+Inspired by Clojure sequences API.
 
 **No dependencies included**
 
@@ -157,8 +158,8 @@ getAll({list: [
 ]}, 'list.*.a.*', true) /* => {
   'list.0.a.0': 1,
   'list.0.a.1': 2,
-  'list.3.a.0': 4,
-  'list.3.a.1': 5,
+  'list.2.a.0': 4,
+  'list.2.a.1': 5,
 } */
 ```
 
@@ -170,6 +171,16 @@ Set all values that matches path with a new value.
 setAll(game, "players.*.isDead", false)
 setAll(game, "players.*.score",  s => (s || 0) + 1)
 ```
+
+### `setWith(data, pathValuePairs)`
+
+Set all values in data using path-value pairs.
+
+```js
+setWith({a: 1, b: 2, c: [3, 4]}, {'a': -1, 'c.0': 0})     // => {a: -1, b: 2, c: [0, 4]}
+setWith({a: 1, b: 2, c: [3, 4]}, [['a', -1], ['c.0', 0]]) // => {a: -1, b: 2, c: [0, 4]}
+```
+
 
 ### `paths(data, traverseArrays = false)`
 
@@ -254,6 +265,29 @@ let total = reduce(
   (total, ingredient) => total + get(ingredient,  'count', 0) * get(ingredient,  'price', 0),
   0
 ); // => 26
+```
+
+### `groupBy(list, path)`
+
+Returns an object of {value: entry, ...} pairs based on path.
+
+```js
+groupBy([
+  {name: "John", admin: false},
+  {name: "Jane", admin: true},
+  {name: "Paul", admin: false},
+  {name: "Fred", admin: false}
+], 'admin') /* => {
+  false: [
+    {name: "John", admin: false},
+    {name: "Jane", admin: true},
+    {name: "Paul", admin: false},
+    {name: "Fred", admin: false}
+  ],
+  true: [
+    {name: "Jane", admin: true}
+  ],
+} */
 ```
 
 ### `each(data, (v, k, data) => {...})`

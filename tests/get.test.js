@@ -4,8 +4,11 @@ describe("get", () => {
   it("returns data as-is if path is 'empty'", function () {
     expect(get({foo: 'bar'}, [])).toStrictEqual({foo: 'bar'});
     expect(get({foo: 'bar'}, '')).toStrictEqual({foo: 'bar'});
-    expect(get({foo: 'bar'}, null)).toStrictEqual({foo: 'bar'});
-    expect(get({foo: 'bar'}, undefined)).toStrictEqual({foo: 'bar'});
+  });
+
+  it("returns nil values as a valid path", function () {
+    expect(get({[null]:      'bar'}, null))     .toStrictEqual('bar');
+    expect(get({[undefined]: 'bar'}, undefined)).toStrictEqual('bar');
   });
 
   it("uses undefined as a default value", function () {
@@ -25,6 +28,11 @@ describe("get", () => {
     expect(get(["a", "b", "c", "d"], ["1"])).toBe("b");
     expect(get(["a", "b", "c", "d"], [2]))  .toBe("c");
     expect(get(["a", "b", "c", "d"], 3))    .toBe("d");
+  });
+
+  it("gets data in a boolean keyed objects", function () {
+    expect(get({true: 10, false: 3}, true )).toBe(10);
+    expect(get({true: 10, false: 3}, false)).toBe(3);
   });
 
   it("can handle falsy values", function () {
