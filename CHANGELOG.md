@@ -4,6 +4,8 @@
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+## [6.0.0](https://github.com/warang580/datamix/compare/5.0.0...6.0.0) (2020-11-01)
+
 - Breaking: `get()` with nil path will look for nil string literal (eg. "undefined" or "null")
 - Feature: `groupBy(data, path, callback = v => v)`
 - Feature: `setWith(data, pathValuePairs)`
