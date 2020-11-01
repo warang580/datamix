@@ -344,6 +344,23 @@ let setAll = function (data, path, newValue) {
   }, data);
 }
 
+/**
+ * Set all data matching wildcard paths
+ */
+let setWith = function (data, pathValuePairs) {
+  // Parse entries into an object
+  if (isArray(pathValuePairs)) {
+    pathValuePairs = reduce(pathValuePairs, (paths, [path, value]) => {
+      paths[path] = value;
+      return paths;
+    }, {});
+  }
+
+  return reduce(pathValuePairs, (data, value, path) => {
+    return set(data, path, value);
+  }, data);
+}
+
 let defaultsTo = function (data, defaultValue = []) {
   return isNil(data) ? defaultValue : data;
 }
@@ -440,6 +457,7 @@ module.exports = {
   only,
   set,
   setAll,
+  setWith,
   keys,
   values,
   plain,

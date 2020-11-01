@@ -172,6 +172,16 @@ setAll(game, "players.*.isDead", false)
 setAll(game, "players.*.score",  s => (s || 0) + 1)
 ```
 
+### `setWith(data, pathValuePairs)`
+
+Set all values in data using path-value pairs.
+
+```js
+setWith({a: 1, b: 2, c: [3, 4]}, {'a': -1, 'c.0': 0})     // => {a: -1, b: 2, c: [0, 4]}
+setWith({a: 1, b: 2, c: [3, 4]}, [['a', -1], ['c.0', 0]]) // => {a: -1, b: 2, c: [0, 4]}
+```
+
+
 ### `paths(data, traverseArrays = false)`
 
 Get an array of all available paths in data.

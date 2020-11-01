@@ -1,13 +1,5 @@
 # ROADMAP
 
-- `setWith(list, pathValuePairs)`
-
-```js
-setWith({a: 1, b: 2, c: [3, 4]}, {'a': -1, 'c.0': 0}) // => {a: -1, b: 2, c: [0, 4]}
-// is equivalent to
-setWith({a: 1, b: 2, c: [3, 4]}, [['a', -1], ['c.0', 0]]) // => {a: -1, b: 2, c: [0, 4]}
-```
-
 - `groupBy(data, path)`
 
 ```js

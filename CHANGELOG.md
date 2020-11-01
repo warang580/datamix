@@ -4,6 +4,8 @@
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+- Feature: `setWith(data, pathValuePairs)`
+
 ## [5.0.0](https://github.com/warang580/datamix/compare/4.0.0...5.0.0) (2020-10-27)
 
 - Breaking: removing functional functions like `_get`, `_set`, etc.
