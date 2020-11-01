@@ -267,6 +267,29 @@ let total = reduce(
 ); // => 26
 ```
 
+### `groupBy(list, path)`
+
+Returns an object of {value: entry, ...} pairs based on path.
+
+```js
+groupBy([
+  {name: "John", admin: false},
+  {name: "Jane", admin: true},
+  {name: "Paul", admin: false},
+  {name: "Fred", admin: false}
+], 'admin') /* => {
+  false: [
+    {name: "John", admin: false},
+    {name: "Jane", admin: true},
+    {name: "Paul", admin: false},
+    {name: "Fred", admin: false}
+  ],
+  true: [
+    {name: "Jane", admin: true}
+  ],
+} */
+```
+
 ### `each(data, (v, k, data) => {...})`
 
 Iterate on key-value pairs to do side-effects.

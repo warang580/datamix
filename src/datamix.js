@@ -27,9 +27,23 @@ let isNil = function (data) {
  * (not part of public API, just here to avoid duplications)
  */
 let normalizePath = function (path) {
-  // Empty paths
-  if (isNil(path) || path === "") {
+  // Empty path
+  if (path === "") {
     return [];
+  }
+
+  // Nil values are treated as string
+  if (path === null) {
+    path = "null";
+  }
+
+  if (path === undefined) {
+    path = "undefined";
+  }
+
+  // Transform booleans into strings so it can be split
+  if (typeof path === "boolean") {
+    path = String(path);
   }
 
   // Transform number like 2 into "2" so it can be split
@@ -43,6 +57,15 @@ let normalizePath = function (path) {
   }
 
   return path;
+}
+
+/**
+ * Apply side-effect to data that doesn't return self to allow chaining
+ * (not part of public API, just here to avoid duplications)
+ */
+let tap = function (data, sideEffect) {
+  sideEffect(data);
+  return data;
 }
 
 /**
@@ -148,11 +171,40 @@ let filter = function (data, callback) {
 }
 
 /**
+ * Returns an object of {value: entry, ...} pairs based on path.
+ */
+let groupBy = function (data, wildcardPath, callback = v => v) {
+  let values = getAll(data, wildcardPath, true);
+
+  return reduce(values, (groups, value, path) => {
+    path  = normalizePath(path);
+    value = callback(value);
+
+    return set(groups, value, entries => {
+      return tap(defaultsTo(entries, []), entries => {
+        // Fetching first wildcard to remove common parts
+        let index = normalizePath(wildcardPath).indexOf('*');
+        let size  = index === -1 ? 0 : index + 1;
+
+        // We get the common part in the "real" path
+        let commonPath = normalizePath(path).slice(0, size);
+        let entry      = get(data, commonPath);
+
+        // We save this entry
+        entries.push(entry);
+      });
+    });
+  }, {});
+
+  return data;
+}
+
+/**
  * Edit value in a "tree" of data and return the changed object (no side-effects)
  * Ex: user = set(user, 'address.street.number', 23)
  */
 let set = function (data, path, newValue) {
-  // @TODO: use anonymous function to avoid copying too much data by scoping
+  // @TODO: use anonymous function to avoid copying sub-data by scoping
   data = copy(data);
 
   path = normalizePath(path)
@@ -467,6 +519,7 @@ module.exports = {
   reduce,
   map,
   filter,
+  groupBy,
   each,
   eachSync,
   parseJson,

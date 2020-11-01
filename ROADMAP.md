@@ -1,26 +1,5 @@
 # ROADMAP
 
-- `groupBy(data, path)`
-
-```js
-groupBy([
-  {name: "John", admin: false},
-  {name: "Jane", admin: true},
-  {name: "Paul", admin: false},
-  {name: "Fred", admin: false}
-], 'admin') /* => {
-  false: [
-    {name: "John", admin: false},
-    {name: "Jane", admin: true},
-    {name: "Paul", admin: false},
-    {name: "Fred", admin: false}
-  ],
-  true: [
-    {name: Jane, admin: true}
-  ],
-} */
-```
-
 - "getWith()" == only() ?
 
 - rename `defaultsTo` to `coerce` or `or` ?
