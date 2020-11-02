@@ -1,5 +1,7 @@
 # ROADMAP
 
+- `branch(data, 'path')` get a partial data tree with only data specific to path that's kept (useful for filters)
+
 - "getWith()" == only() ?
 
 - rename `defaultsTo` to `coerce` or `or` ?
