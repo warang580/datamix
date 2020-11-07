@@ -108,7 +108,7 @@ keys({a: 1, b, 2, c: {x: 3, y: 4}}) // ['a', 'b', 'c']
 
 ### `values(data)`
 
-Get all data keys, like Object.values().
+Get all data values, like Object.values().
 
 ```js
 values({a: 1, b, 2, c: {x: 3, y: 4}}) // => [1, 2, {x: 3, y: 4}]
@@ -138,7 +138,7 @@ let number = getFirst(user, ['mobile_phone', 'home_phone', 'work_phone'], "?"); 
 
 ### `getAll(data, wildcardPath, withPaths = false)`
 
-Aggregate all values that match a specific paths with wildcards.
+Aggregate all values that match a specific path with wildcards.
 
 ```js
 let users = [{
@@ -267,29 +267,6 @@ let total = reduce(
 ); // => 26
 ```
 
-### `groupBy(list, path)`
-
-Returns an object of {value: entry, ...} pairs based on path.
-
-```js
-groupBy([
-  {name: "John", admin: false},
-  {name: "Jane", admin: true},
-  {name: "Paul", admin: false},
-  {name: "Fred", admin: false}
-], 'admin') /* => {
-  false: [
-    {name: "John", admin: false},
-    {name: "Jane", admin: true},
-    {name: "Paul", admin: false},
-    {name: "Fred", admin: false}
-  ],
-  true: [
-    {name: "Jane", admin: true}
-  ],
-} */
-```
-
 ### `each(data, (v, k, data) => {...})`
 
 Iterate on key-value pairs to do side-effects.
@@ -306,6 +283,30 @@ Iterate on key-value pairs to do asynchronous side-effects, but synchronously an
 await eachSync(users, saveUserPromise);
 
 // All promises are done here
+```
+
+### `groupBy(list, path)`
+
+Returns an object of {value: entry, ...} pairs based on path.
+Entries contain only data that's not shared with other entries.
+
+```js
+groupBy([
+  {name: "John", admin: false},
+  {name: "Jane", admin: true},
+  {name: "Paul", admin: false},
+  {name: "Fred", admin: false}
+], '*.admin') /* => {
+  false: [
+    {name: "John", admin: false},
+    {name: "Jane", admin: true},
+    {name: "Paul", admin: false},
+    {name: "Fred", admin: false}
+  ],
+  true: [
+    {name: "Jane", admin: true}
+  ],
+} */
 ```
 
 ### `copy(data)`
