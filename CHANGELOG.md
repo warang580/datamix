@@ -4,6 +4,10 @@
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+## [6.2.0](https://github.com/warang580/datamix/compare/6.1.0...6.2.0) (2020-11-08)
+
+- Feature: `eachAsync(data, callback)`
+
 ## [6.1.0](https://github.com/warang580/datamix/compare/6.0.0...6.1.0) (2020-11-08)
 
 - Feature: `tap(data, sideEffect)` is part of public API
