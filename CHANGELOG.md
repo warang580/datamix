@@ -5,6 +5,7 @@
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
 - Feature: `tap(data, sideEffect)` is part of public API
+- Feature: `match(data, predicates)`
 - Bugfix: `only()` wasn't working with arrays with dot notation (eg. `['a.b']`)
 - Improved documentation
 

@@ -11,7 +11,15 @@ let isArray = function (data) {
  * (not part of public API, just here to avoid duplications)
  */
 let isObject = function (data) {
-  return data instanceof Object;
+  return data instanceof Object && typeof data !== "function";
+}
+
+/**
+ * Tells if data is a function
+ * (not part of public API, just here to avoid duplications)
+ */
+let isFunction = function (data) {
+  return typeof data === "function";
 }
 
 /**
@@ -199,6 +207,32 @@ let groupBy = function (data, wildcardPath, callback = v => v) {
 }
 
 /**
+ * Match data with predicates
+ */
+let match = function (data, predicates) {
+  // (a && b && c && ...)
+  let and = (data) => reduce(data, (f, b) => f && b, true);
+
+  if (isArray(predicates)) {
+    return and(map(predicates, ([k, v]) => {
+      return match(get(data, k), v);
+    }));
+  }
+
+  if (isObject(predicates)) {
+    return and(map(predicates, (v, k) => {
+      return match(get(data, k), v);
+    }));
+  }
+
+  if (isFunction(predicates)) {
+    return predicates(data);
+  }
+
+  return data === predicates;
+}
+
+/**
  * Edit value in a "tree" of data and return the changed object (no side-effects)
  * Ex: user = set(user, 'address.street.number', 23)
  */
@@ -210,7 +244,7 @@ let set = function (data, path, newValue) {
 
   // We found the value and return new value instead
   if (path.length === 0) {
-    if (typeof newValue !== "function") {
+    if (! isFunction(newValue)) {
       return newValue;
     }
 
@@ -480,10 +514,6 @@ let entries = function (data, deep = false, traverseArrays = false) {
 }
 
 /**
-* Functional versions
-*/
-
-/**
 * Make a functional version of an existing function
 */
 let deferData = function (fn, ...args) {
@@ -519,6 +549,7 @@ module.exports = {
   map,
   filter,
   groupBy,
+  match,
   each,
   eachSync,
   parseJson,

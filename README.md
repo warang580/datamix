@@ -315,6 +315,17 @@ groupBy([
 } */
 ```
 
+### [`match(data, predicates)`](/tests/match.test.js)
+
+Returns true if data matches predicates.
+
+```js
+match({a: {x: 1, y: 2}, b: 3}, {
+  'a.x': v => v < 2,
+  'b':   3,
+}) // => true
+```
+
 ### [`copy(data)`](/tests/copy.test.js)
 
 Returns a copy of data to ensure that we don't change data by side-effects.
