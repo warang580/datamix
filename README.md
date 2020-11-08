@@ -16,11 +16,9 @@ Inspired by Clojure sequences.
 
 ## Installation
 
-[![NPM](https://nodei.co/npm/@warang580/datamix.png?compact=true)](https://npmjs.org/package/@warang580/datamix)
+[![NpmInstall](https://img.shields.io/badge/npm-install%20%40warang580%2Fdatamix-blue)](https://npmjs.org/package/@warang580/datamix)
 
-NPM  : `npm install @warang580/datamix`
-
-Yarn : `yarn add @warang580/datamix`
+[![YarnInstall](https://img.shields.io/badge/yarn-add%20%40warang580%2Fdatamix-blue)](https://classic.yarnpkg.com/en/package/@warang580/datamix)
 
 ## Import
 
