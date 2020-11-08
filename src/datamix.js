@@ -309,7 +309,7 @@ let each = function (data, callback) {
 }
 
 /**
- * Looping over arbitrary data (object key-values / array) with an asynchronous callback
+ * Looping over arbitrary data (object key-values / array) with an asynchronous callback that will be done in order
  * Ex: eachSync(data, (v, k, o) => asyncSideEffect)
  *
  * If given an object, it calls asyncSideEffect for each key-value pair
@@ -328,6 +328,16 @@ let eachSync = async function (data, callback) {
 
     await callback(data[key], key, data);
   }
+}
+
+/**
+ * Looping over arbitrary data (object key-values / array) with an asynchronous callback that will be done in parallel
+ * Ex: eachAsync(data, (v, k, o) => asyncSideEffect)
+ *
+ * If given an object, it calls asyncSideEffect for each key-value pair
+ */
+let eachAsync = async function (data, callback) {
+  return await Promise.all(values(map(data, callback)));
 }
 
 /**
@@ -567,6 +577,7 @@ module.exports = {
   match,
   each,
   eachSync,
+  eachAsync,
   parseJson,
   deferData,
   tap,

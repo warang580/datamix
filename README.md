@@ -287,8 +287,16 @@ Iterate on key-value pairs to do asynchronous side-effects, but synchronously an
 
 ```js
 await eachSync(users, saveUserPromise);
+// All promises are done here (in order)
+```
 
-// All promises are done here
+### [`eachAsync(data, async (v, k, data) => {...})`](/tests/eachSync.test.js)
+
+Like `eachSync` but we don't ensure order, similar as `Promise.all()`.
+
+```js
+await eachAsync(users, saveUserPromise);
+// All promises are done here (in parallel)
 ```
 
 ### [`groupBy(list, path)`](/tests/groupBy.test.js)
