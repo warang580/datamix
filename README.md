@@ -330,6 +330,18 @@ numbers.push(5);
 previous // => [1, 2, 3, 4]
 ```
 
+### [`tap(data)`](/tests/tap.test.js)
+
+Returns data after applying side-effect to allow chaining
+
+```js
+// Logging without intermediate values
+return tap(value, v => console.log("returned", v));
+
+// Adding a user in a single line
+return tap(users, users => users.push(user));
+```
+
 ### [`parseJson(raw, defaultValue = {})`](/tests/parseJson.test.js)
 
 Parse json without failing with invalid raw json.

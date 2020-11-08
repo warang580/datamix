@@ -61,7 +61,6 @@ let normalizePath = function (path) {
 
 /**
  * Apply side-effect to data that doesn't return self to allow chaining
- * (not part of public API, just here to avoid duplications)
  */
 let tap = function (data, sideEffect) {
   sideEffect(data);
@@ -524,4 +523,5 @@ module.exports = {
   eachSync,
   parseJson,
   deferData,
+  tap,
 }
