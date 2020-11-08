@@ -10,7 +10,7 @@ Manipulate data of different types with the same consistent API to fetch or upda
 
 Inspired by Clojure sequences.
 
-> Clojure defines many algorithms in terms of sequences (seqs). A seq is a **logical list**, and unlike most [languages] where the list is represented by a concrete [...] structure, Clojure uses the ISeq interface to allow **many data structures to provide access to their elements as sequences**. [Source](https://clojure.org/reference/sequences)
+> Clojure defines many algorithms in terms of sequences (seqs). A seq is a **logical list**, and unlike most [languages] where the list is represented by a concrete [...] structure, Clojure uses the ISeq interface to allow **many data structures to provide access to their elements as sequences**. ([source](https://clojure.org/reference/sequences))
 
 # Getting Started
 
