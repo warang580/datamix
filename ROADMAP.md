@@ -1,7 +1,7 @@
 # ROADMAP
 
-- `mergeWith(data, (v1, v2, k?) => {/* ... */}, defaultValue?, ...datas)`
+- Fusion of eachSync and eachAsync ? `eachAsync(data, callback, ensuresOrder = false)`
 
-- `eachAsync` that doesn't care about order ? like Promise.all()
+- `mergeWith(data, (v1, v2, k?) => {/* ... */}, defaultValue?, ...datas)`
 
 - transducers ? (t => t.map() t.filter() ?)

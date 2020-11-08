@@ -9,4 +9,10 @@ describe("tap", () => {
 
     expect(callback.calledWith(["a", "b"])).toBe(true);
   });
+
+  it("can be used in reduce to simplify code", function () {
+    expect([1, 2, 3].reduce((l, e) => {
+      return tap(l, l => l.push(e + 1));
+    }, [])).toStrictEqual([2, 3, 4]);
+  });
 });
