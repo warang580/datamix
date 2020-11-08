@@ -18,7 +18,7 @@
   ],
   "license": "MIT",
   "main": "src/datamix.js",
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
+  "publishConfig": { "registry": "https://registry.npmjs.org/" },
   "dependencies": {},
   "devDependencies": {
     "jest": "^26.5.3",
