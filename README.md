@@ -1,19 +1,24 @@
-# Datamix
+# Datamix [![GitHub release](https://img.shields.io/github/release/warang580/datamix.svg)](https://gitHub.com/warang580/datamix/releases/)
 
-Manipulate data of different types with the same consistent API
-(ie. objects and array are both key-value pairs)
+[![Build Status](https://travis-ci.org/warang580/datamix.svg?branch=develop)](https://travis-ci.org/warang580/datamix)
+[![Dependencies](https://david-dm.org/warang580/datamix.svg)](https://david-dm.org/warang580/datamix)
+[![DevDependencies](https://david-dm.org/warang580/datamix/dev-status.svg)](https://david-dm.org/warang580/datamix#info=devDependencies)
+[![Downloads](https://img.shields.io/npm/dt/@warang580/datamix)](https://npmjs.org/package/@warang580/datamix)
 
-Inspired by Clojure sequences API.
+Manipulate data of different types with the same consistent API to fetch or update important data.
+(ie. objects and arrays are both key-value pairs)
 
-**No dependencies included**
+Inspired by Clojure sequences.
+
+> Clojure defines many algorithms in terms of sequences (seqs). A seq is a **logical list**, and unlike most [languages] where the list is represented by a concrete [...] structure, Clojure uses the ISeq interface to allow **many data structures to provide access to their elements as sequences**. [Source](https://clojure.org/reference/sequences)
 
 # Getting Started
 
 ## Installation
 
-NPM  : `npm install @warang580/datamix`
+[![NpmInstall](https://img.shields.io/badge/npm-install%20%40warang580%2Fdatamix-blue)](https://npmjs.org/package/@warang580/datamix)
 
-Yarn : `yarn add @warang580/datamix`
+[![YarnInstall](https://img.shields.io/badge/yarn-add%20%40warang580%2Fdatamix-blue)](https://classic.yarnpkg.com/en/package/@warang580/datamix)
 
 ## Import
 
@@ -33,10 +38,11 @@ import { get, set } from "@warang580/datamix";
 ## API
 
 This section contains all functions with a quick description and usage example.
+You can click on the function signature to check associated tests as more examples.
 
 Reminder: all functions work on arrays AND objects.
 
-### `get(data, path, notFoundValue = undefined)`
+### [`get(data, path, notFoundValue = undefined)`](/tests/get.test.js)
 
 Get a value in a deep data tree of values.
 
@@ -46,7 +52,7 @@ let userId   = get(response, 'data.user.id'); // => <someId> or `undefined`
 let userName = get(users, [userId, 'name'], "unknown"); // => <name> or "unknown"
 ```
 
-### `set(data, path, newValue)`
+### [`set(data, path, newValue)`](/tests/set.test.js)
 
 Set a value (without side-effects) in a deep data tree of values.
 
@@ -74,7 +80,7 @@ user /* => {
 } */
 ```
 
-### `defaultsTo(data, defaultValue = [])`
+### [`defaultsTo(data, defaultValue = [])`](/tests/defaultsTo.test.js)
 
 Coerce a nil value (`undefined` or `null`) into another. Used to ensure that a value is always an array or object depending on needs.
 
@@ -82,7 +88,7 @@ Coerce a nil value (`undefined` or `null`) into another. Used to ensure that a v
 let config = defaultsTo(getConfig(/* ... */), {})
 ```
 
-### `only(data, paths, withMissing = true)`
+### [`only(data, paths, withMissing = true)`](/tests/only.test.js)
 
 Get a subset of data using paths. Paths can be arrays ['path', ...] or objects like `{newpath: oldpath, ...}`.
 
@@ -98,7 +104,7 @@ only(
 ) // => {foo: {a: 1, b: 3}}
 ```
 
-### `keys(data)`
+### [`keys(data)`](/tests/keys.test.js)
 
 Get all data keys, like Object.keys().
 
@@ -106,15 +112,15 @@ Get all data keys, like Object.keys().
 keys({a: 1, b, 2, c: {x: 3, y: 4}}) // ['a', 'b', 'c']
 ```
 
-### `values(data)`
+### [`values(data)`](/tests/values.test.js)
 
-Get all data keys, like Object.values().
+Get all data values, like Object.values().
 
 ```js
 values({a: 1, b, 2, c: {x: 3, y: 4}}) // => [1, 2, {x: 3, y: 4}]
 ```
 
-### `size(data)`
+### [`size(data)`](/tests/size.test.js)
 
 Get data size, like Array.length.
 
@@ -123,7 +129,7 @@ size({a: 1, b, 2, c: {x: 3, y: 4}}) // => 3
 size(undefined) // => undefined
 ```
 
-### `getFirst(data, paths, defaultValue = undefined)`
+### [`getFirst(data, paths, defaultValue = undefined)`](/tests/getFirst.test.js)
 
 Get the first non-nil value using a list of possible paths in a value.
 
@@ -136,9 +142,9 @@ let user = {
 let number = getFirst(user, ['mobile_phone', 'home_phone', 'work_phone'], "?"); // => "0123"
 ```
 
-### `getAll(data, wildcardPath, withPaths = false)`
+### [`getAll(data, wildcardPath, withPaths = false)`](/tests/getAll.test.js)
 
-Aggregate all values that match a specific paths with wildcards.
+Aggregate all values that match a specific path with wildcards.
 
 ```js
 let users = [{
@@ -163,7 +169,7 @@ getAll({list: [
 } */
 ```
 
-### `setAll(data, wildcardPath, newValue)`
+### [`setAll(data, wildcardPath, newValue)`](/tests/setAll.test.js)
 
 Set all values that matches path with a new value.
 
@@ -172,7 +178,7 @@ setAll(game, "players.*.isDead", false)
 setAll(game, "players.*.score",  s => (s || 0) + 1)
 ```
 
-### `setWith(data, pathValuePairs)`
+### [`setWith(data, pathValuePairs)`](/tests/setWith.test.js)
 
 Set all values in data using path-value pairs.
 
@@ -182,7 +188,7 @@ setWith({a: 1, b: 2, c: [3, 4]}, [['a', -1], ['c.0', 0]]) // => {a: -1, b: 2, c:
 ```
 
 
-### `paths(data, traverseArrays = false)`
+### [`paths(data, traverseArrays = false)`](/tests/paths.test.js)
 
 Get an array of all available paths in data.
 
@@ -198,7 +204,7 @@ paths(list)       // => ['0', '1.a', '1.b', '2']
 paths(list, true) // => ['0', '1.a', '1.b.0', '1.b.1', '2.0', '2.1']
 ```
 
-### `entries(data, deep = false, traverseArrays = false)`
+### [`entries(data, deep = false, traverseArrays = false)`](/tests/entries.test.js)
 
 Get an array of all [path, value] in data, like `Object.entries()`.
 
@@ -210,7 +216,7 @@ entries(data, true)       // => [['a', 1], ['b.x', 2], ['b.y', [3, 4]], ['c', ['
 entries(data, true, true) // => [['a', 1], ['b.x', 2], ['b.y.0', 3], ['b.y.1', 4], ['c.0', 'foo'], ['c.1', 'bar']]
 ```
 
-### `plain(data, traverseArrays = false)`
+### [`plain(data, traverseArrays = false)`](/tests/plain.test.js)
 
 Get an object of all {path: value} in data.
 
@@ -221,7 +227,7 @@ paths(data)       // => {'a': 1, 'b.x': 2, 'b.y': [3, 4], 'c': ['foo', 'bar']}
 paths(data, true) // => {'a': 1, 'b.x': 2, 'b.y.0': 3, 'b.y.1': 4, 'c.0': 'foo', 'c.1': 'bar'}
 ```
 
-### `isIterable(data)`
+### [`isIterable(data)`](/tests/isIterable.test.js)
 
 Returns if data can be iterated upon using functions of this library.
 
@@ -234,7 +240,7 @@ isIterable("hello")     // => false
 isIterable(42)          // => false
 ```
 
-### `map(data, (v, k, data) => {...})`
+### [`map(data, (v, k, data) => {...})`](/tests/map.test.js)
 
 Update value on key-value pairs (reminder: all functions work on objects too).
 
@@ -242,7 +248,7 @@ Update value on key-value pairs (reminder: all functions work on objects too).
 let names = map(users, user => get(user, 'name', 'unknown'));
 ```
 
-### `filter(data, (v, k, data) => {...})`
+### [`filter(data, (v, k, data) => {...})`](/tests/filter.test.js)
 
 Recreate a new data based on key-value filter.
 
@@ -250,7 +256,7 @@ Recreate a new data based on key-value filter.
 let admins = filter(users, user => get(user, 'is_admin', false));
 ```
 
-### `reduce(data, (acc, v, k, data) => {...})`
+### [`reduce(data, (acc, v, k, data) => {...})`](/tests/reduce.test.js)
 
 Reduce data based on key-value pairs.
 
@@ -267,9 +273,28 @@ let total = reduce(
 ); // => 26
 ```
 
-### `groupBy(list, path)`
+### [`each(data, (v, k, data) => {...})`](/tests/each.test.js)
+
+Iterate on key-value pairs to do side-effects.
+
+```js
+each(dictionary, word => console.log("word", word));
+```
+
+### [`eachSync(data, async (v, k, data) => {...})`](/tests/eachSync.test.js)
+
+Iterate on key-value pairs to do asynchronous side-effects, but synchronously and in order (avoids boilerplate).
+
+```js
+await eachSync(users, saveUserPromise);
+
+// All promises are done here
+```
+
+### [`groupBy(list, path)`](/tests/groupBy.test.js)
 
 Returns an object of {value: entry, ...} pairs based on path.
+Entries contain only data that's not shared with other entries.
 
 ```js
 groupBy([
@@ -277,7 +302,7 @@ groupBy([
   {name: "Jane", admin: true},
   {name: "Paul", admin: false},
   {name: "Fred", admin: false}
-], 'admin') /* => {
+], '*.admin') /* => {
   false: [
     {name: "John", admin: false},
     {name: "Jane", admin: true},
@@ -290,25 +315,31 @@ groupBy([
 } */
 ```
 
-### `each(data, (v, k, data) => {...})`
+### [`match(data, predicates)`](/tests/match.test.js)
 
-Iterate on key-value pairs to do side-effects.
-
-```js
-each(dictionary, word => console.log("word", word));
-```
-
-### `eachSync(data, async (v, k, data) => {...})`
-
-Iterate on key-value pairs to do asynchronous side-effects, but synchronously and in order (avoids boilerplate).
+Returns true if data matches predicates.
 
 ```js
-await eachSync(users, saveUserPromise);
+match({a: {x: 1, y: 2}, b: 3}, {
+  'a.x': v => v < 2,
+  'b':   3,
+}) // => true
 
-// All promises are done here
+let users = [{
+  name: "Jane",
+  contacts: [{email: "paul@mail.com"}],
+}, {
+  name: "Fred",
+  contacts: [{email: "john@mail.com"}, {email: "judy@mail.com"}],
+}];
+
+// "Does someone known John ?"
+match(users, {
+  "*.contacts.*.email": emails => emails.indexOf('john@mail.com') !== -1,
+}) // => true
 ```
 
-### `copy(data)`
+### [`copy(data)`](/tests/copy.test.js)
 
 Returns a copy of data to ensure that we don't change data by side-effects.
 
@@ -323,7 +354,19 @@ numbers.push(5);
 previous // => [1, 2, 3, 4]
 ```
 
-### `parseJson(raw, defaultValue = {})`
+### [`tap(data)`](/tests/tap.test.js)
+
+Returns data after applying side-effect to allow chaining
+
+```js
+// Logging without intermediate values
+return tap(value, v => console.log("returned", v));
+
+// Adding a user in a single line
+return tap(users, users => users.push(user));
+```
+
+### [`parseJson(raw, defaultValue = {})`](/tests/parseJson.test.js)
 
 Parse json without failing with invalid raw json.
 
@@ -333,7 +376,7 @@ parseJson('{invalid json}') // => {}
 parseJson('{invalid json}', undefined) // => undefined
 ```
 
-### `deferData(fn, ...args)`
+### [`deferData(fn, ...args)`](/tests/deferData.test.js)
 
 Transform any function of this library into a function that just takes data as input. Useful for map/filter/reduce/etc.
 
@@ -348,3 +391,7 @@ let names = map(users, user => get(user, 'name', 'unknown'));
 # [CHANGELOG](/CHANGELOG.md)
 
 # [ROADMAP](/ROADMAP.md)
+
+# Stats
+
+[![HitCount](http://hits.dwyl.io/warang580/datamix.svg)](http://hits.dwyl.io/warang580/datamix)

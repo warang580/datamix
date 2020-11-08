@@ -1,6 +1,6 @@
 {
   "name": "@warang580/datamix",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "description": "Manipulate data of different types with the same consistent API",
   "repository": "github:warang580/datamix",
   "homepage": "https://github.com/warang580/datamix",
@@ -18,6 +18,7 @@
   ],
   "license": "MIT",
   "main": "src/datamix.js",
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "dependencies": {},
   "devDependencies": {
     "jest": "^26.5.3",

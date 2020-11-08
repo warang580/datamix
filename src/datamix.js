@@ -11,7 +11,15 @@ let isArray = function (data) {
  * (not part of public API, just here to avoid duplications)
  */
 let isObject = function (data) {
-  return data instanceof Object;
+  return data instanceof Object && typeof data !== "function";
+}
+
+/**
+ * Tells if data is a function
+ * (not part of public API, just here to avoid duplications)
+ */
+let isFunction = function (data) {
+  return typeof data === "function";
 }
 
 /**
@@ -60,8 +68,23 @@ let normalizePath = function (path) {
 }
 
 /**
- * Apply side-effect to data that doesn't return self to allow chaining
+ * Returns if path is wildcard
  * (not part of public API, just here to avoid duplications)
+ */
+let isWildcard = function (needle) {
+  return needle === "*";
+}
+
+/**
+ * Returns if path contains wildcard
+ * (not part of public API, just here to avoid duplications)
+ */
+let containsWildcard = function (path) {
+  return path.indexOf('*') !== -1;
+}
+
+/**
+ * Apply side-effect to data that doesn't return self to allow chaining
  */
 let tap = function (data, sideEffect) {
   sideEffect(data);
@@ -200,6 +223,39 @@ let groupBy = function (data, wildcardPath, callback = v => v) {
 }
 
 /**
+ * Match data with predicates
+ */
+let match = function (data, predicates) {
+  // Dispatch "get" or "getAll" depending on path
+  let getter = (path) => {
+    return containsWildcard(normalizePath(path))
+      ? getAll
+      : get;
+  };
+
+  // "AND" on data eg. a && b && c && ...
+  let and = (data) => reduce(data, (f, b) => f && b, true);
+
+  if (isArray(predicates)) {
+    return and(map(predicates, ([k, v]) => {
+      return match(getter(k)(data, k), v);
+    }));
+  }
+
+  if (isObject(predicates)) {
+    return and(map(predicates, (v, k) => {
+      return match(getter(k)(data, k), v);
+    }));
+  }
+
+  if (isFunction(predicates)) {
+    return Boolean(predicates(data));
+  }
+
+  return data === predicates;
+}
+
+/**
  * Edit value in a "tree" of data and return the changed object (no side-effects)
  * Ex: user = set(user, 'address.street.number', 23)
  */
@@ -211,7 +267,7 @@ let set = function (data, path, newValue) {
 
   // We found the value and return new value instead
   if (path.length === 0) {
-    if (typeof newValue !== "function") {
+    if (! isFunction(newValue)) {
       return newValue;
     }
 
@@ -302,7 +358,7 @@ let only = function (data, paths, withMissing = true) {
   // Transform ['a', 'b'] into {a: 'a', b: 'b'}
   if (isArray(paths)) {
     paths = reduce(paths, (paths, v, k) => {
-      return set(paths, v, v);
+      return tap(paths, p => p[v] = v);
     }, {});
   }
 
@@ -336,14 +392,6 @@ let getFirst = function (data, paths, defaultValue = undefined) {
  * Get all data matching wildcard paths
  */
 let getAll = function (data, path, withPaths = false) {
-  let isWildcard = function (needle) {
-    return needle === "*";
-  }
-
-  let containsWildcard = function (path) {
-    return path.indexOf('*') !== -1;
-  }
-
   path = normalizePath(path);
 
   // Make a recursive function to iterate over all branches the path "contains"
@@ -481,10 +529,6 @@ let entries = function (data, deep = false, traverseArrays = false) {
 }
 
 /**
-* Functional versions
-*/
-
-/**
 * Make a functional version of an existing function
 */
 let deferData = function (fn, ...args) {
@@ -520,8 +564,10 @@ module.exports = {
   map,
   filter,
   groupBy,
+  match,
   each,
   eachSync,
   parseJson,
   deferData,
+  tap,
 }
