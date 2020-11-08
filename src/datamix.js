@@ -302,7 +302,7 @@ let only = function (data, paths, withMissing = true) {
   // Transform ['a', 'b'] into {a: 'a', b: 'b'}
   if (isArray(paths)) {
     paths = reduce(paths, (paths, v, k) => {
-      return set(paths, v, v);
+      return tap(paths, p => p[v] = v);
     }, {});
   }
 

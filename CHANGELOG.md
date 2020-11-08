@@ -4,6 +4,9 @@
 
 ## [Unreleased](https://github.com/warang580/datamix/compare/master...develop)
 
+- Bugfix: `only()` wasn't working with arrays with dot notation (eg. `['a.b']`)
+- Improved documentation
+
 ## [6.0.0](https://github.com/warang580/datamix/compare/5.0.0...6.0.0) (2020-11-01)
 
 - Breaking: `get()` with nil path will look for nil string literal (eg. "undefined" or "null")
