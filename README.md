@@ -1,15 +1,22 @@
-# Datamix
+# Datamix [![GitHub release](https://img.shields.io/github/release/warang580/datamix.svg)](https://gitHub.com/warang580/datamix/releases/)
 
-Manipulate data of different types with the same consistent API
-(ie. objects and array are both key-value pairs)
+[![Build Status](https://travis-ci.org/warang580/datamix.svg?branch=develop)](https://travis-ci.org/warang580/datamix)
+[![Dependencies](https://david-dm.org/warang580/datamix.svg)](https://david-dm.org/warang580/datamix)
+[![DevDependencies](https://david-dm.org/warang580/datamix/dev-status.svg)](https://david-dm.org/warang580/datamix#info=devDependencies)
+[![Downloads](https://img.shields.io/npm/dt/@warang580/datamix)](https://npmjs.org/package/@warang580/datamix)
 
-Inspired by Clojure sequences API.
+Manipulate data of different types with the same consistent API to fetch or update important data.
+(ie. objects and arrays are both key-value pairs)
 
-**No dependencies included**
+Inspired by Clojure sequences.
+
+> Clojure defines many algorithms in terms of sequences (seqs). A seq is a **logical list**, and unlike most [languages] where the list is represented by a concrete [...] structure, Clojure uses the ISeq interface to allow **many data structures to provide access to their elements as sequences**. [Source](https://clojure.org/reference/sequences)
 
 # Getting Started
 
 ## Installation
+
+[![NPM](https://nodei.co/npm/@warang580/datamix.png?compact=true)](https://npmjs.org/package/@warang580/datamix)
 
 NPM  : `npm install @warang580/datamix`
 
@@ -350,3 +357,7 @@ let names = map(users, user => get(user, 'name', 'unknown'));
 # [CHANGELOG](/CHANGELOG.md)
 
 # [ROADMAP](/ROADMAP.md)
+
+# Stats
+
+[![HitCount](http://hits.dwyl.io/warang580/datamix.svg)](http://hits.dwyl.io/warang580/datamix)
