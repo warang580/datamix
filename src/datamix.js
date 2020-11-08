@@ -68,6 +68,22 @@ let normalizePath = function (path) {
 }
 
 /**
+ * Returns if path is wildcard
+ * (not part of public API, just here to avoid duplications)
+ */
+let isWildcard = function (needle) {
+  return needle === "*";
+}
+
+/**
+ * Returns if path contains wildcard
+ * (not part of public API, just here to avoid duplications)
+ */
+let containsWildcard = function (path) {
+  return path.indexOf('*') !== -1;
+}
+
+/**
  * Apply side-effect to data that doesn't return self to allow chaining
  */
 let tap = function (data, sideEffect) {
@@ -210,23 +226,30 @@ let groupBy = function (data, wildcardPath, callback = v => v) {
  * Match data with predicates
  */
 let match = function (data, predicates) {
-  // (a && b && c && ...)
+  // Dispatch "get" or "getAll" depending on path
+  let getter = (path) => {
+    return containsWildcard(normalizePath(path))
+      ? getAll
+      : get;
+  };
+
+  // "AND" on data eg. a && b && c && ...
   let and = (data) => reduce(data, (f, b) => f && b, true);
 
   if (isArray(predicates)) {
     return and(map(predicates, ([k, v]) => {
-      return match(get(data, k), v);
+      return match(getter(k)(data, k), v);
     }));
   }
 
   if (isObject(predicates)) {
     return and(map(predicates, (v, k) => {
-      return match(get(data, k), v);
+      return match(getter(k)(data, k), v);
     }));
   }
 
   if (isFunction(predicates)) {
-    return predicates(data);
+    return Boolean(predicates(data));
   }
 
   return data === predicates;
@@ -369,14 +392,6 @@ let getFirst = function (data, paths, defaultValue = undefined) {
  * Get all data matching wildcard paths
  */
 let getAll = function (data, path, withPaths = false) {
-  let isWildcard = function (needle) {
-    return needle === "*";
-  }
-
-  let containsWildcard = function (path) {
-    return path.indexOf('*') !== -1;
-  }
-
   path = normalizePath(path);
 
   // Make a recursive function to iterate over all branches the path "contains"

@@ -324,6 +324,19 @@ match({a: {x: 1, y: 2}, b: 3}, {
   'a.x': v => v < 2,
   'b':   3,
 }) // => true
+
+let users = [{
+  name: "Jane",
+  contacts: [{email: "paul@mail.com"}],
+}, {
+  name: "Fred",
+  contacts: [{email: "john@mail.com"}, {email: "judy@mail.com"}],
+}];
+
+// "Does someone known John ?"
+match(users, {
+  "*.contacts.*.email": emails => emails.indexOf('john@mail.com') !== -1,
+}) // => true
 ```
 
 ### [`copy(data)`](/tests/copy.test.js)

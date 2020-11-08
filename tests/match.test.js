@@ -41,5 +41,27 @@ describe("match", () => {
       .toStrictEqual(false);
   });
 
-  // @TODO: wildcard paths ?
+  it("handles wildcard paths", function () {
+    let users = [{
+      name: "Jane",
+      contacts: [{email: "paul@mail.com"}],
+    }, {
+      name: "Fred",
+      contacts: [{email: "john@mail.com"}, {email: "judy@mail.com"}],
+    }];
+
+    expect(match(users, {
+      "*.contacts.*.email": emails => emails.indexOf('john@mail.com') !== -1,
+    })).toStrictEqual(true);
+  });
+
+  it("coerces callback values into boolean", function () {
+    expect(match(42, v => v)).toStrictEqual(true);
+    expect(match([], v => v)).toStrictEqual(true);
+    expect(match({}, v => v)).toStrictEqual(true);
+
+    expect(match(0,         v => v)).toStrictEqual(false);
+    expect(match(null,      v => v)).toStrictEqual(false);
+    expect(match(undefined, v => v)).toStrictEqual(false);
+  });
 });
